@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+.DS_Store
+
+.vscode/*
+
+CMakeLists.txt
+
+.idea/*
+
+cmake-build-debug
+
+*.dSYM
