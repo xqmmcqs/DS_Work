@@ -8,6 +8,7 @@
 #include <string.h>
 #include "list.h"
 
+// 初始化链表，创建头结点
 void initList(List * plist)
 {
     *plist = (List) malloc(sizeof(Node));
@@ -15,40 +16,45 @@ void initList(List * plist)
     (*plist)->next = *plist;
 }
 
+// 判断链表是否为空
 bool isEmpty(const List list)
 {
     return list->next == list;
 }
 
-bool AddItem(List pnode, Item item)
+// 向链表的某个节点后插入一个节点
+bool AddItem(List pnode, int item)
 {
     List newNode = (List) malloc(sizeof(Node));
-    if (newNode == NULL)
+    if (newNode == NULL) // 空间分配失败
         return false;
-    memcpy(&(newNode->item), &item, sizeof(item));
+    newNode->item = item;
     newNode->next = pnode->next;
     pnode->next = newNode;
     return true;
 }
 
+// 删除链表中指定的节点
 void delItem(List list, List pnode)
 {
     List delNode = pnode->next;
-    if (delNode == list)
+    if (delNode == list) // 如果pnode的后继是头结点，则删除头结点的后继
         pnode = delNode, delNode = delNode->next;
     pnode->next = delNode->next;
     printf("%d ", delNode->item);
     free(delNode);
 }
 
+// 找到链表中某一节点的后继
 List nextItem(const List pnode)
 {
     List nItem = pnode->next;
-    if (nItem->item == 0)
+    if (nItem->item == 0) // 如果pnode的后继是头结点，则返回头结点的后继
         nItem = nItem->next;
     return nItem;
 }
 
+// 释放链表空间
 void destroyList(List * plist)
 {
     while (!isEmpty(*plist))

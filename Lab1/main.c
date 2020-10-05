@@ -8,13 +8,13 @@ int main()
     List list, now;
     initList(&list);
     now = list;
-    for (int i = 1; i <= n; ++i)
+    for (int i = 1; i <= n; ++i) // 逐个添加元素
     {
         AddItem(now, i);
         now = nextItem(now);
     }
     now = list;
-    for (int i = 1; i < x; ++i)
+    for (int i = 1; i < x; ++i) // 找到第x个元素
         now = nextItem(now);
     for (int i = 1; i < n; ++i)
     {

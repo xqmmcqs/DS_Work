@@ -12,24 +12,52 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef int Item;
-
 typedef struct node
 {
-    Item item;
+    int item;
     struct Node * next;
 } Node;
 
 typedef Node * List;
 
+/*
+ * 操作：初始化链表
+ * 后件：plist指向一个循环链表的头结点
+ */
 void initList(List * plist);
 
+/*
+ * 操作：判断链表是否为空
+ * 前件：list是循环链表的头结点
+ * 后件：如果该链表为空，返回true，否则返回false
+ */
 bool isEmpty(const List list);
 
-bool AddItem(List pnode, Item item);
+/*
+ * 操作：向链表的某个节点后插入一个节点
+ * 前件：pnode是链表中的某一个节点
+ * 后件：如果成功，pnode之后添加一个新节点，item属性为传入的第二个参数，并且函数返回true；如果不成功则返回false
+ */
+bool AddItem(List pnode, int item);
 
+/*
+ * 操作：删除链表中指定的节点
+ * 前件：list是该链表的头结点，pnode是需要删除的节点
+ * 后件：删除链表中的pnode节点
+ */
 void delItem(List list, List pnode);
 
+/*
+ * 操作：找到链表中某一节点的后继
+ * 前件：pnode指向链表中的某一个节点
+ * 后件：函数返回pnode的后继，并且跳过头结点
+ */
 List nextItem(const List pnode);
 
+
+/*
+ * 操作：释放链表空间
+ * 前件：plist指向需要释放空间的链表的头结点
+ * 后件：释放plist指向链表的空间，plist重置为空指针
+ */
 void destroyList(List * plist);
