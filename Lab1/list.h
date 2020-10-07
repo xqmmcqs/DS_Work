@@ -2,15 +2,12 @@
 // Created by xqmmcqs on 2020/9/30.
 //
 
-#ifndef DS_WORK_LIST_H
-#define DS_WORK_LIST_H
+#ifndef LAB1_LIST_H
+#define LAB1_LIST_H
 
-#endif //DS_WORK_LIST_H
+#endif //LAB1_LIST_H
 
-#include <stdio.h>
 #include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
 
 typedef struct node
 {
@@ -38,7 +35,7 @@ bool isEmpty(const List list);
  * 前件：pnode是链表中的某一个节点
  * 后件：如果成功，pnode之后添加一个新节点，item属性为传入的第二个参数，并且函数返回true；如果不成功则返回false
  */
-bool AddItem(List pnode, int item);
+void AddItem(List pnode, int item);
 
 /*
  * 操作：删除链表中指定的节点

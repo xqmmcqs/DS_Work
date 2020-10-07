@@ -3,15 +3,16 @@
 //
 
 #include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include "list.h"
 
 // 初始化链表，创建头结点
 void initList(List * plist)
 {
     *plist = (List) malloc(sizeof(Node));
+    if (!*plist)
+        exit(1);
     (*plist)->item = 0;
     (*plist)->next = *plist;
 }
@@ -23,11 +24,11 @@ bool isEmpty(const List list)
 }
 
 // 向链表的某个节点后插入一个节点
-bool AddItem(List pnode, int item)
+void AddItem(List pnode, int item)
 {
     List newNode = (List) malloc(sizeof(Node));
     if (newNode == NULL) // 空间分配失败
-        return false;
+        exit(1);
     newNode->item = item;
     newNode->next = pnode->next;
     pnode->next = newNode;
