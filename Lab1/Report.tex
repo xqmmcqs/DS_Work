@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage{ctex}
+\usepackage[top=0.7in,bottom=0.7in,left=0.5in,right=0.5in]{geometry}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{fontspec}
+\newfontfamily\menlo{Menlo}
+\usepackage{xcolor} % 定制颜色
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+backgroundcolor=\color{white},      % choose the background color
+basicstyle=\footnotesize\ttfamily,  % size of fonts used for the code
+columns=fullflexible,
+tabsize=4,
+breaklines=true,               % automatic line breaking only at whitespace
+captionpos=b,                  % sets the caption-position to bottom
+commentstyle=\color{mygreen},  % comment style
+escapeinside={\%*}{*)},        % if you want to add LaTeX within your code
+keywordstyle=\color{blue},     % keyword style
+stringstyle=\color{mymauve}\ttfamily,  % string literal style
+frame=single,
+rulesepcolor=\color{red!20!green!20!blue!20},
+% identifierstyle=\color{red},
+language=c++,
+}
+
+\newcommand{\hmwkTitle}{加里森的任务\ 实验报告}
+\newcommand{\hmwkClass}{数据结构}
+\newcommand{\hmwkClassInstructor}{}
+\newcommand{\hmwkAuthorName}{毛子恒\ 李臻\ 张梓靖}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ : \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\title{\hmwkClass\ ：\hmwkTitle}
+\author{\hmwkAuthorName}
+
+\newcommand{\True}{\textbf{T}}
+\newcommand{\False}{\textbf{F}}
+
+\begin{document}
+
+\maketitle
+
+\section*{小组成员}
+
+\setlength{\tabcolsep}{9mm}
+{
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{llll}
+        班级：2019211309 & 姓名：毛子恒 & 学号：2019211397 & 分工：代码\ 文档\\
+ 
+        班级：2019211310 & 姓名：李臻 & 学号：2019211458 & 分工：代码\ 文档\\
+
+        班级：2019211308 & 姓名：张梓靖 & 学号： & 分工：可视化\ 文档\\
+    \end{tabular}
+\end{table}
+}
+
+\section{需求分析}
+
+\section{概要设计}
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+#include <stdio.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+#define SIZE 26
+
+int
+main (int argc, char *argv[])
+{
+int array[SIZE];
+int i;
+char c;
+
+for (i = 0; i < SIZE; i++)
+array[i] = 0;
+
+while ((c = getchar ()) != EOF)
+{
+  if (isupper (c))
+    {
+      array[c - 'A']++;
+    }
+}
+for (i = 0; i < 26; i++)
+printf ("%c:%5d\n", (char) ('A' + i), array[i]);
+
+return 0;
+}
+\end{lstlisting}
+
+\section{详细设计}
+
+\section{调试分析报告}
+
+\section{用户使用说明}
+
+\section{测试结果}
+
+\end{document}
