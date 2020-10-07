@@ -14,17 +14,17 @@ int main()
     now = list;
     for (int i = 1; i <= n; ++i) // 逐个添加元素
     {
-        AddItem(now, i);
-        now = nextItem(now);
+        addNode(now, i);
+        now = nextNode(now);
     }
     now = list;
     for (int i = 1; i < x; ++i) // 找到第x个元素
-        now = nextItem(now);
+        now = nextNode(now);
     for (int i = 1; i < n; ++i)
     {
         for (int j = 1; j < y; ++j)
-            now = nextItem(now);
-        delItem(list, now);
+            now = nextNode(now);
+        delNode(list, now);
     }
     printf("%d\n", now->item);
     destroyList(&list);

@@ -24,7 +24,7 @@ bool isEmpty(const List list)
 }
 
 // 向链表的某个节点后插入一个节点
-void AddItem(List pnode, int item)
+void addNode(List pnode, int item)
 {
     List newNode = (List) malloc(sizeof(Node));
     if (newNode == NULL) // 空间分配失败
@@ -32,22 +32,21 @@ void AddItem(List pnode, int item)
     newNode->item = item;
     newNode->next = pnode->next;
     pnode->next = newNode;
-    return true;
 }
 
 // 删除链表中指定的节点
-void delItem(List list, List pnode)
+void delNode(List list, List pnode)
 {
     List delNode = pnode->next;
     if (delNode == list) // 如果pnode的后继是头结点，则删除头结点的后继
         pnode = delNode, delNode = delNode->next;
     pnode->next = delNode->next;
-    printf("%d ", delNode->item);
+    // printf("%d ", delNode->item);
     free(delNode);
 }
 
 // 找到链表中某一节点的后继
-List nextItem(const List pnode)
+List nextNode(const List pnode)
 {
     List nItem = pnode->next;
     if (nItem->item == 0) // 如果pnode的后继是头结点，则返回头结点的后继
@@ -59,7 +58,7 @@ List nextItem(const List pnode)
 void destroyList(List * plist)
 {
     while (!isEmpty(*plist))
-        delItem(*plist, *plist);
+        delNode(*plist, *plist);
     free(*plist);
     *plist = NULL;
 }

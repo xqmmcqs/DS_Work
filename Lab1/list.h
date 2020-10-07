@@ -33,24 +33,23 @@ bool isEmpty(const List list);
 /*
  * 操作：向链表的某个节点后插入一个节点
  * 前件：pnode是链表中的某一个节点
- * 后件：如果成功，pnode之后添加一个新节点，item属性为传入的第二个参数，并且函数返回true；如果不成功则返回false
+ * 后件：如果成功，pnode之后添加一个新节点，item属性为传入的第二个参数
  */
-void AddItem(List pnode, int item);
+void addNode(List pnode, int item);
 
 /*
  * 操作：删除链表中指定的节点
  * 前件：list是该链表的头结点，pnode是需要删除的节点
  * 后件：删除链表中的pnode节点
  */
-void delItem(List list, List pnode);
+void delNode(List list, List pnode);
 
 /*
  * 操作：找到链表中某一节点的后继
  * 前件：pnode指向链表中的某一个节点
  * 后件：函数返回pnode的后继，并且跳过头结点
  */
-List nextItem(const List pnode);
-
+List nextNode(const List pnode);
 
 /*
  * 操作：释放链表空间
