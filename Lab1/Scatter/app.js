@@ -21,7 +21,7 @@ function getPoints(n) {
     return points;
 }
 
-var count = parseInt(prompt("请输入 x,y 的上限", 5));
+var count = parseInt(prompt("请输入 n 的值", 5));
 
 var dataPoints = getPoints(count);
 // Give the points a 3D feel by adding a radial gradient
