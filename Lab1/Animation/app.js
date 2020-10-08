@@ -39,7 +39,7 @@ const simulator = {
                 clearInterval(ticker);
             }
 
-        }, 400);
+        }, 100);
     }
 }
 
