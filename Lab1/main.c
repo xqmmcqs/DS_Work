@@ -9,6 +9,11 @@ int main()
 {
     int n, x, y;
     scanf("%d%d%d", &n, &x, &y);
+    if (n <= 1 || x > n || y <= 0)
+    {
+        puts("Please check your input.");
+        exit(1);
+    }
     List list, now;
     initList(&list);
     now = list;
@@ -18,7 +23,7 @@ int main()
         now = nextNode(now);
     }
     now = list;
-    for (int i = 1; i < x; ++i) // 找到第x个元素
+    for (int i = 1; i < x; ++i) // 找到第x个元素的前驱
         now = nextNode(now);
     for (int i = 1; i < n; ++i)
     {

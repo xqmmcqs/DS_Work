@@ -187,6 +187,72 @@ void destroyList(List * plist);
 
 \subsection{改进设想的经验和体会}
 
+\subsubsection{改进1}
+
+在主程序的这一部分：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i <= n; ++i) // 逐个添加元素
+{
+    addNode(now, i);
+    now = nextNode(now);
+}
+now = list;
+for (int i = 1; i < x; ++i) // 找到第x个元素的前驱
+    now = nextNode(now);
+\end{lstlisting}
+
+可以另用一个指针变量在向链表逐个添加元素的同时记录第$x-1$个元素的位置，以省去第二个循环。优化后的实现如下：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+List temp = NULL;
+for (int i = 1; i <= n; ++i)
+{
+    addNode(now, i);
+    now = nextNode(now);
+    if (i == x - 1) temp = now;
+}
+now = temp;
+\end{lstlisting}
+
+\subsubsection{改进2}
+
+在主程序的这一部分：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i < n; ++i)
+{
+    for (int j = 1; j < y; ++j)
+        now = nextNode(now);
+    delNode(list, now);
+}
+\end{lstlisting}
+
+对于有$n-i+1$个元素的环，找到当前元素之后的第$y-1$个元素和找到当前元素之后的第$(y-1)\bmod (n-i+1)$个元素并无区别。优化后的实现如下：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i < n; ++i)
+{
+    for (int j = 1; j <= (y - 1) % (n - i + 1); ++j)
+        now = nextNode(now);
+    delNode(list, now);
+}
+\end{lstlisting}
+
+当$y$比$n$大的时候对时间复杂度有很可观的优化。
+
 \section{用户使用说明}
 
 \section{测试结果}
