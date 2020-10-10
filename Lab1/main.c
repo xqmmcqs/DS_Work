@@ -9,7 +9,7 @@ int main()
 {
     int n, x, y;
     scanf("%d%d%d", &n, &x, &y);
-    if (n <= 1 || x > n || x <= 0 || y <= 0)
+    if (n <= 1 || x > n || x <= 0 || y <= 0 || n > 1000000000 || y > 1000000000)
     {
         puts("Please check your input.");
         exit(1);
@@ -31,6 +31,7 @@ int main()
             now = nextNode(now);
         delNode(list, now);
     }
+    now->item == 1 ? puts("Yes") : puts("No");
     printf("%d\n", now->item);
     destroyList(&list);
     return 0;
