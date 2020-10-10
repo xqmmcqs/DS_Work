@@ -9,7 +9,7 @@ int main()
 {
     int n, x, y;
     scanf("%d%d%d", &n, &x, &y);
-    if (n <= 1 || x > n || y <= 0)
+    if (n <= 1 || x > n || x <= 0 || y <= 0)
     {
         puts("Please check your input.");
         exit(1);
