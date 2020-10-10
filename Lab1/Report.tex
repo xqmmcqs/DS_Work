@@ -68,7 +68,7 @@ language=c++,
             
             班级：2019211310 & 姓名：李臻   & 学号：2019211458 & 分工：代码\ 文档   \\
             
-            班级：2019211308 & 姓名：张梓靖 & 学号：           & 分工：可视化\ 文档 \\
+            班级：2019211308 & 姓名：张梓靖 & 学号：2019211379 & 分工：可视化\ 文档 \\
         \end{tabular}
     \end{table}
 }
@@ -79,7 +79,7 @@ language=c++,
 
 在由序号为$1$至$n$的$n$个元素依次排列并且首尾相接而组成的环中，规定初始时从序号$1$开始依次经过$2,3,...$元素走到第$n$个元素的方向为正方向。
 
-初始时以第$x$个元素为起点$st$，重复以下过程$n-1$次：沿正方向找到$st$之后的第$y-1$个元素$del$，从环中删除$del$元素，再将原$del$的下一个元素作为新的$st$。
+初始时以第$x$个元素为起点$st$，重复以下过程$n-1$次：以$st$为第1个元素，沿正方向找到第$y$个元素$del$，从环中删除$del$元素，再将原$del$的下一个元素作为新的$st$。
 
 求经过$n-1$次操作之后，环中仅剩的一个元素的序号。
 
@@ -89,13 +89,15 @@ language=c++,
 
 使用单循环链表维护此约瑟夫环，首先在链表中依次插入$n$个结点表示$n$名队员，以$now$指针模拟计数过程。
 
-从头结点找到第$x$个结点，此后执行以下操作$n-1$次：从当前节点开始向后找到它之后的第$y-1$个结点，删除这个结点。
+从头结点找到第$x$个结点，此后执行以下操作$n-1$次：找到当前结点之后的第$y-1$个结点，删除这个结点。
 
 此题中单循环链表实现了初始化、判空、在指定位置增加节点、删除指定位置的节点、释放空间这五种操作。
 
 由于链表的删除操作实现是删除给定结点的后继，所以$now$指针始终指向当前正在计数元素的前驱。
 
 由于单循环链表中存在一个特殊的头结点，所以另实现一个函数，返回某个结点的后继（跳过头结点）。
+
+更多细节在调试分析报告部分中讨论。
 
 \subsection{链表的定义}
 
@@ -184,6 +186,72 @@ void destroyList(List * plist);
 \subsection{算法复杂度分析}
 
 \subsection{改进设想的经验和体会}
+
+\subsubsection{改进1}
+
+在主程序的这一部分：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i <= n; ++i) // 逐个添加元素
+{
+    addNode(now, i);
+    now = nextNode(now);
+}
+now = list;
+for (int i = 1; i < x; ++i) // 找到第x个元素的前驱
+    now = nextNode(now);
+\end{lstlisting}
+
+可以另用一个指针变量在向链表逐个添加元素的同时记录第$x-1$个元素的位置，以省去第二个循环。优化后的实现如下：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+List temp = NULL;
+for (int i = 1; i <= n; ++i)
+{
+    addNode(now, i);
+    now = nextNode(now);
+    if (i == x - 1) temp = now;
+}
+now = temp;
+\end{lstlisting}
+
+\subsubsection{改进2}
+
+在主程序的这一部分：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i < n; ++i)
+{
+    for (int j = 1; j < y; ++j)
+        now = nextNode(now);
+    delNode(list, now);
+}
+\end{lstlisting}
+
+对于有$n-i+1$个元素的环，找到当前元素之后的第$y-1$个元素和找到当前元素之后的第$(y-1)\bmod (n-i+1)$个元素并无区别。优化后的实现如下：
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\menlo,
+    basicstyle=\small\menlo]
+for (int i = 1; i < n; ++i)
+{
+    for (int j = 1; j <= (y - 1) % (n - i + 1); ++j)
+        now = nextNode(now);
+    delNode(list, now);
+}
+\end{lstlisting}
+
+当$y$比$n$大的时候对时间复杂度有很可观的优化。
 
 \section{用户使用说明}
 
