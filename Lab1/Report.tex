@@ -377,7 +377,7 @@ void destroyList(List * plist) // 释放链表空间
 
 由于单循环链表中存在一个特殊的头结点，所以另实现一个函数，返回某个结点的后继（跳过头结点）。
 
-代码实现过程中，删除操作的细节：由于$now$指向正在计数结点的前驱，删除某个结点之后$now$仍然指向原来被删节点的前驱，之后执行$y-1$次寻找后继操作，$now$便指向下一个待删除结点的前驱。
+删除操作的细节：由于$now$指向正在计数结点的前驱，删除某个结点之后$now$仍然指向原来被删节点的前驱，之后执行$y-1$次寻找后继操作，$now$便指向下一个待删除结点的前驱。
 
 由于主函数对函数的调用足够严密，所以链表的实现没有考虑不符合前件的情况。
 
@@ -495,8 +495,6 @@ int main()
 
 \section{用户使用说明}
 
-在Linux bash/macOS zsh中的命令如下：
-
 使用gcc编译生成可执行文件。
 
 \begin{lstlisting}[language={bash},
@@ -509,6 +507,13 @@ gcc -o main -std=c11 main.c list.c
 \begin{lstlisting}[language={bash},
     basicstyle=\small\menlo]
 ./main
+\end{lstlisting}
+
+在Windows cmd下：
+
+\begin{lstlisting}[language={bash},
+    basicstyle=\small\menlo]
+main
 \end{lstlisting}
 
 之后通过标准输入输入数据，输入格式参考1.2节的输入描述，结果通过标准输出返回。如果输入合法并且程序正常运行结束，主函数返回值为0。
