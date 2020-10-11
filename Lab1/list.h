@@ -39,10 +39,10 @@ void addNode(List pnode, int item);
 
 /*
  * 操作：删除链表中指定的节点
- * 前件：list是该链表的头结点，pnode是需要删除的节点
- * 后件：删除链表中的pnode节点
+ * 前件：pnode是需要删除的节点的前驱且不是头结点
+ * 后件：删除链表中的pnode节点的后继
  */
-void delNode(List list, List pnode);
+void delNode(List pnode);
 
 /*
  * 操作：找到链表中某一节点的后继

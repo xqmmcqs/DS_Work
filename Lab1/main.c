@@ -3,13 +3,14 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "list.h"
 
 int main()
 {
     int n, x, y;
     scanf("%d%d%d", &n, &x, &y);
-    if (n <= 1 || x > n || x <= 0 || y <= 0 || n > 1000000000 || y > 1000000000)
+    if (n <= 1 || x > n || x <= 0 || y <= 0 || n > 10000000 || y > 10000000) // 输入不合法
     {
         puts("Please check your input.");
         exit(1);
@@ -28,8 +29,8 @@ int main()
     for (int i = 1; i < n; ++i)
     {
         for (int j = 1; j < y; ++j)
-            now = nextNode(now);
-        delNode(list, now);
+            now = nextNode(now); // 计数，找到第y个结点
+        delNode(now); // 删除第y个结点
     }
     now->item == 1 ? puts("Yes") : puts("No");
     printf("%d\n", now->item);

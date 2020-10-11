@@ -13,7 +13,7 @@ void initList(List * plist)
     *plist = (List) malloc(sizeof(Node));
     if (!*plist)
         exit(1);
-    (*plist)->item = 0;
+    (*plist)->item = 0; // 创建空的头结点
     (*plist)->next = *plist;
 }
 
@@ -30,18 +30,18 @@ void addNode(List pnode, int item)
     if (newNode == NULL) // 空间分配失败
         exit(1);
     newNode->item = item;
-    newNode->next = pnode->next;
+    newNode->next = pnode->next; // 将newNode插入链表内
     pnode->next = newNode;
 }
 
 // 删除链表中指定的节点
-void delNode(List list, List pnode)
+void delNode(List pnode)
 {
     List delNode = pnode->next;
-    if (delNode == list) // 如果pnode的后继是头结点，则删除头结点的后继
+    if (delNode->item == 0) // 如果pnode的后继是头结点，则删除头结点的后继
         pnode = delNode, delNode = delNode->next;
-    pnode->next = delNode->next;
-    // printf("%d ", delNode->item);
+    pnode->next = delNode->next; // 从链表中移除delNode结点
+     printf("%d\n", delNode->item); // 用于代码测试
     free(delNode);
 }
 
@@ -57,8 +57,8 @@ List nextNode(const List pnode)
 // 释放链表空间
 void destroyList(List * plist)
 {
-    while (!isEmpty(*plist))
-        delNode(*plist, *plist);
+    while (!isEmpty(*plist)) // 如果链表不为空，则删除链表中剩余的节点
+        delNode(*plist);
     free(*plist);
     *plist = NULL;
 }
