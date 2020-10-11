@@ -41,7 +41,7 @@ void delNode(List pnode)
     if (delNode->item == 0) // 如果pnode的后继是头结点，则删除头结点的后继
         pnode = delNode, delNode = delNode->next;
     pnode->next = delNode->next; // 从链表中移除delNode结点
-     printf("%d\n", delNode->item); // 用于代码测试
+    // printf("%d\n", delNode->item); // 用于代码测试
     free(delNode);
 }
 

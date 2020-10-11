@@ -12,9 +12,9 @@ function getPoints(n) {
     for (var x = 1; x <= n; x++) {
         for (var y = 1; y <= n; y++) {
             points.push([
-                x,
                 y,
-                cal(n, x, y)
+                cal(n, x, y),
+                x,
             ]);
         }
     }
@@ -55,9 +55,18 @@ var chart = new Highcharts.Chart({
             viewDistance: 5,
             fitToPlot: false,
             frame: {
-                bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
-                back: { size: 1, color: 'rgba(0,0,0,0.04)' },
-                side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                bottom: {
+                    size: 1,
+                    color: 'rgba(0,0,0,0.02)'
+                },
+                back: {
+                    size: 1,
+                    color: 'rgba(0,0,0,0.04)'
+                },
+                side: {
+                    size: 1,
+                    color: 'rgba(0,0,0,0.06)'
+                }
             }
         }
     },
@@ -65,14 +74,17 @@ var chart = new Highcharts.Chart({
         text: '加里森的任务'
     },
     subtitle: {
-        text: '在不同条件下的结果对比'
+        text: '在不同条件下的结果对比，拖动图表以旋转'
     },
     plotOptions: {
         scatter: {
-            width: 10,
-            height: 10,
-            depth: 10
+            width: 19,
+            height: 19,
+            depth: 19
         }
+    },
+    tooltip: {
+        pointFormat: 'x = {point.z}, y = {point.x}, ans = {point.y}'
     },
     yAxis: {
         min: 0,

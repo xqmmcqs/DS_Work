@@ -10,7 +10,7 @@ int main()
 {
     int n, x, y;
     scanf("%d%d%d", &n, &x, &y);
-    if (n <= 1 || x > n || x <= 0 || y <= 0 || n > 10000000 || y > 10000000) // 输入不合法
+    if (n <= 1 || x > n || x <= 0 || y <= 0 || n > 10000 || y > 50000) // 输入不合法
     {
         puts("Please check your input.");
         exit(1);

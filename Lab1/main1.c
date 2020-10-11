@@ -7,6 +7,8 @@ int main()
     int ans = 0;
     for (int i = 2; i <= n; ++i)
         ans = (ans + y) % i;
-    printf("%d\n", (ans + x - 1) % n + 1);
+    ans = (ans - x + 1) % n + 1;
+    ans == 1 ? puts("Yes") : puts("No");
+    printf("%d\n", ans);
     return 0;
 }
