@@ -38,14 +38,14 @@ void pushStack(Stack * s, ElemType item)
 // 获取栈顶元素
 ElemType getStackTop(Stack s)
 {
-    if (s.base == s.top)exit(1); // 如果栈为空，返回异常
+    if (isStackEmpty(s))exit(1); // 如果栈为空，返回异常
     return *(s.top - 1);
 }
 
 // 栈顶元素出栈
 ElemType popStack(Stack * s)
 {
-    if (s->base == s->top)exit(1); // 如果栈为空，返回异常
+    if (isStackEmpty(*s))exit(1); // 如果栈为空，返回异常
     return *(--s->top);
 }
 
