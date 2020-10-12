@@ -21,10 +21,13 @@ bool isQueueEmpty(Queue q)
 
 void pushQueue(Queue * q, ElemType item)
 {
-    if (q->rear - q->base >= q->queuesize)
+    if (q->rear - q->base = q->queuesize)
     {
+        int temp1 = q->front - q->base;
         q->base = (ElemType *) realloc(q->base, (q->queuesize + QUEUEINCREASESIZE) * sizeof(ElemType));
         if (!q->base)exit(1);
+        q->front = q->base + temp1;
+        q->rear = q->base + q->queuesize;
         q->queuesize += QUEUEINCREASESIZE;
     }
     *(q->rear++) = item;
