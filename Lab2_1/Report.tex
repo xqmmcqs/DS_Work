@@ -199,6 +199,54 @@ Please check your input.
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
+//数据对象
+typedef struct stack
+{
+    ElemType * top;
+    ElemType * base;
+    int stacksize;
+} Stack;
+
+/*
+ * 操作：初始化栈，分配空间
+ * 后件：s指向一个空栈
+ */
+void initStack(Stack * s);
+
+/*
+ * 操作：判断栈是否为空
+ * 前件：s是一个栈
+ * 后件：如果该栈为空，返回true；否则返回false
+ */
+bool isStackEmpty(Stack s);
+
+/*
+ * 操作：将数据元素入栈
+ * 前件：s指向一个栈
+ * 后件：如果入栈成功，item成为栈顶元素；如果入栈之前该栈已满，则重新分配空间
+ */
+void pushStack(Stack * s, ElemType item);
+
+/*
+ * 操作：获取栈顶元素
+ * 前件：s是一个栈
+ * 后件：如果该栈不为空，返回栈顶元素
+ */
+ElemType getStackTop(Stack s);
+
+/*
+ * 操作：栈顶元素出栈
+ * 前件：s指向一个栈
+ * 后件：如果该栈不为空，栈顶元素出栈，返回这个出栈的元素
+ */
+ElemType popStack(Stack * s);
+
+/*
+ * 操作：释放栈空间
+ * 前件：s指向一个栈
+ * 后件：释放该栈的空间
+ */
+void destroyStack(Stack * s);
 \end{lstlisting}
 
 \subsection{主程序的流程}
@@ -217,7 +265,7 @@ Please check your input.
 
 \begin{figure}[htbp]
     
-    %\centering\includegraphics[width=0.4\textwidth]{}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic2_1.png}
     
     \caption{函数的调用关系}
     
@@ -232,6 +280,55 @@ Please check your input.
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
+void Stack(Stack * s) // 初始化链表
+{    
+    给*s分配内存
+    if (*s内存分配失败)// 空间分配失败
+        异常退出
+    s->top <- s->base
+    s->stacksize <- STACKINCREASESIZE
+}
+
+bool isStackEmpty(Stack s)// 判断栈是否为空
+{
+    if (s栈为空) 返回1
+    else 返回0
+}
+
+void pushStack(Stack * s, ElemType item)// 将数据元素入栈
+{
+    if (s栈满) 
+    {
+        分配给s更多的空间
+        if (s空间分配失败)
+            异常退出
+        s->top <- s->base + s->stacksize
+        s->stacksize 增加 STACKINCREASESIZE 的空间
+    }
+    item入栈
+}
+
+ElemType getStackTop(Stack s)// 获取栈顶元素
+{
+    if (栈为空)
+        返回异常
+    返回 *(s.top - 1)
+}
+
+ElemType popStack(Stack * s)// 栈顶元素出栈
+{
+    if (栈为空)
+        返回异常 
+    返回 *(--s->top)
+}
+
+void destroyStack(Stack * s)// 释放栈空间
+{
+    释放s->base
+    s->base <- NULL
+    s->top <- NULL
+    s->stacksize <- 0
+}
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
