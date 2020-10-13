@@ -200,6 +200,8 @@ Please check your input.
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
 //数据对象
+typedef char ElemType;
+
 typedef struct stack
 {
     ElemType * top;
@@ -275,18 +277,18 @@ void destroyStack(Stack * s);
 
 \subsection{栈的实现}
 
-链表设计中基本操作的伪代码算法如下：
+栈设计中基本操作的伪代码算法如下：
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-void Stack(Stack * s) // 初始化链表
+void Stack(Stack * s) // 初始化栈
 {    
     给*s分配内存
-    if (*s内存分配失败)// 空间分配失败
+    if (*s内存分配失败) // 空间分配失败
         异常退出
     s->top <- s->base
-    s->stacksize <- STACKINCREASESIZE
+    s->stacksize <- STACKINCREASESIZE // 初始栈空间为STACKINCREASESIZE
 }
 
 bool isStackEmpty(Stack s)// 判断栈是否为空
@@ -303,7 +305,7 @@ void pushStack(Stack * s, ElemType item)// 将数据元素入栈
         if (s空间分配失败)
             异常退出
         s->top <- s->base + s->stacksize
-        s->stacksize 增加 STACKINCREASESIZE 的空间
+        s->stacksize <- s->stacksize + STACKINCREASESIZE
     }
     item入栈
 }
@@ -312,14 +314,14 @@ ElemType getStackTop(Stack s)// 获取栈顶元素
 {
     if (栈为空)
         返回异常
-    返回 *(s.top - 1)
+    返回 *(s.top - 1) // 返回栈顶元素
 }
 
 ElemType popStack(Stack * s)// 栈顶元素出栈
 {
     if (栈为空)
         返回异常 
-    返回 *(--s->top)
+    返回 *(--s->top) // 返回栈顶元素，并且top减1
 }
 
 void destroyStack(Stack * s)// 释放栈空间
@@ -367,6 +369,10 @@ initStack, isStackEmpty, pushStack, getStackTop, popStack, destroyStack函数的
 
 程序中的各个栈操作都可以直接改成一个数组的正序/逆序的访问。但是空间浪费很严重。并且不符合题目要求。
 
+\subsubsection{改进2}
+
+此题中可以将改为根据输入规模一次性分配足够规模的栈空间，但是由于主程序中读入方式的限制而没有实现。
+
 \section{用户使用说明}
 
 使用gcc编译生成可执行文件。
@@ -406,16 +412,58 @@ main
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\consolas]
-5 -1 2
+1$21#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\consolas]
 Please check your input.
+\end{lstlisting}
+
+【输入】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+0#
+\end{lstlisting}
+
+【输出】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+0
+\end{lstlisting}
+
+【输入】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+00000000000000000000#
+\end{lstlisting}
+
+【输出】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+0
+\end{lstlisting}
+
+【输入】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+0000000010#
+\end{lstlisting}
+
+【输出】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+2
 \end{lstlisting}
 
 \subsection{测试第三部分}
@@ -463,7 +511,7 @@ int main()
 
 比对脚本(chk.sh)如下：
 
-\begin{lstlisting}[language={C++},
+\begin{lstlisting}[language={bash},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
