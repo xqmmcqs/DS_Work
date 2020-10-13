@@ -2,7 +2,7 @@
 
 using namespace std;
 
-const int LEN = 1e4;
+const int LEN = 1e2;
 
 int main()
 {

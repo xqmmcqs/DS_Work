@@ -79,17 +79,13 @@ language=c++,
 
 \subsection{题目描述}
 
-在由序号为$1$至$n$的$n$个元素依次排列并且首尾相接而组成的环中，规定初始时从序号$1$开始依次经过$2,3,...$元素走到第$n$个元素的方向为正方向。
-
-初始时以第$x$个元素为起点$st$，重复以下过程$n-1$次：以$st$为第1个元素，沿正方向找到第$y$个元素$del$，从环中删除$del$元素，再将原$del$的下一个元素作为新的$st$。
-
-求经过$n-1$次操作之后，环中仅剩的一个元素的序号是否是1。
+输入一串二进制数，输出其八进制表示。
 
 \subsection{输入描述}
 
-程序从标准输入中读入数据。输入一行三个整数，用空格分隔，分别表示$n,x,y$。
+程序从标准输入中读入数据。输入一个0/1串表示二进制数，以“\#”表示输入结束。
 
-其中各个值的范围需要满足$1 < n \leq 10^4\quad 0 < x \leq n\quad 0 < y \leq 5\times 10^4$。
+输入满足二进制串的长度$LEN\leq 10^6$
 
 \subsection{输出描述}
 
@@ -98,8 +94,8 @@ language=c++,
 输出分为三种情况：
 
 \begin{enumerate}
-    \item 输入合法，程序正常运行结束。此时输出两行，第一行一个字符串"Yes"或者"No"（不带引号），分别表示最后一个元素是/不是1，第二行一个数字，表示最后一个元素的序号。
-    \item 输入不合法。此时输出一行一个字符串"Please check your input."（不带引号）。
+    \item 输入合法，程序正常运行结束。此时输出一行一个八进制数。
+    \item 输入不合法，即输入中包含除了0/1、空白字符、\#以外的其他字符，此时输出一行一个字符串"Please check your input."（不带引号）。
     \item 程序发生运行时错误，比如内存分配失败。此时程序没有输出。
 \end{enumerate}
 
@@ -109,115 +105,93 @@ language=c++,
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-10 1 3
+110#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-No
-4
+6
 \end{lstlisting}
 
 \subsubsection{样例输入输出2}
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-10 3 7
+010111111#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-Yes
-1
+277
 \end{lstlisting}
 
 \subsubsection{样例输入输出3}
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-100 87 305
+0110001010#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-No
-50
+612
 \end{lstlisting}
 
 \subsubsection{样例输入输出4}
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-1000 725 801
+1101000110010000000101000101100100100001011100110111111111010000001011000101111100010100011100#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-No
-798
+15062005054441346777201305742434
 \end{lstlisting}
 
 \subsubsection{样例输入输出5}
 
 【输入】
 
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
-1 1 3
+112000#
 \end{lstlisting}
 
 【输出】
 
-\begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
-Please check your input.
-\end{lstlisting}
-
-\subsubsection{样例输入输出6}
-
-【输入】
-
-\begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
-5 6 3
-\end{lstlisting}
-
-【输出】
-
-\begin{lstlisting}[language={bash},
+\begin{lstlisting}[
     basicstyle=\small\menlo]
 Please check your input.
 \end{lstlisting}
 
 \subsection{程序功能}
 
-程序通过给定的$n,x,y$计算出最后环中仅剩的元素序号，并且与1比较。
+程序将输入的二进制串转化为八进制并且输出。
 
 \section{概要设计}
 
 \subsection{问题解决的思路}
 
-使用单循环链表维护此约瑟夫环，首先在链表中依次插入$n$个结点表示$n$名队员，以$now$指针模拟计数过程。
+使用栈模拟操作过程。首先将所有二进制位依次入栈$s1$。之后每次从$s1$栈顶取出三个二进制位，将其转化为一个八进制位后入栈$s2$，最后把$s2$中元素依次出栈并输出。
 
-从头结点找到第$x$个结点，此后执行以下操作$n-1$次：找到当前结点之后的第$y-1$个结点，删除这个结点。
-
-此题中单循环链表实现了初始化、判空、在指定位置增加节点、删除指定位置的节点、释放空间这五种操作。
+此题中栈实现了初始化、判空、入栈、出栈、获取栈顶元素、释放空间这六种操作。
 
 \subsection{栈的定义}
 
@@ -230,12 +204,10 @@ Please check your input.
 \subsection{主程序的流程}
 
 \begin{enumerate}
-    \item 输入
-    \item 初始化链表
-    \item 在链表中依次插入$n$个结点
-    \item 找到第$x$个结点
-    \item 循环$n-1$次：找到当前节点之后的第$y-1$个结点，删除这个结点
-    \item 输出
+    \item 初始化栈
+    \item 输入，元素入$s1$栈
+    \item 每次从$s1$中出栈三个元素，计算对应的八进制位并入$s2$栈，重复执行直到$s1$为空
+    \item 元素出$s2$栈并输出
     \item 释放空间
 \end{enumerate}
 
@@ -255,7 +227,7 @@ Please check your input.
 
 \subsection{栈的实现}
 
-链表设计种基本操作的伪代码算法如下：
+链表设计中基本操作的伪代码算法如下：
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\menlo,
@@ -278,57 +250,25 @@ Please check your input.
 
 \subsection{设计实现的回顾讨论}
 
-由于链表的删除操作实现是删除给定结点的后继，所以$now$指针始终指向当前正在计数元素的前驱。
+$Stack$类型的$top$指针指向栈顶元素的下一个位置，实现时有几次没有注意到这个问题而导致错误。
 
-由于单循环链表中存在一个特殊的头结点，所以另实现一个函数，返回某个结点的后继（跳过头结点）。
+期望输入合法，所以对于更多的不合法输入（比如输入末尾没有\#）没有作处理。
 
-删除操作的细节：由于$now$指向正在计数结点的前驱，删除某个结点之后$now$仍然指向原来被删节点的前驱，之后执行$y-1$次寻找后继操作，$now$便指向下一个待删除结点的前驱。
+由于不清楚测试用数据的范围大小，$STACKINCREASESIZE$常量的大小取到100，也就是每次增加100个元素的空间。当输入很大时复杂度可能会比较大。
 
-由于主函数对函数的调用足够严密，所以链表的实现没有考虑不符合前件的情况。
-
-由于链表元素均为int类型，所以链表的实现中没有对元素类型进行抽象，并且多次使用赋值运算符更改元素值。
+由于主函数对函数的调用足够严密，所以栈 的实现没有考虑不符合前件的情况。
 
 \subsection{算法复杂度分析}
 
 initStack, isStackEmpty, pushStack, getStackTop, popStack, destroyStack函数的时间复杂度均为$O(1)$。
 
-主程序复杂度为$O(n^2)$，整体时间复杂度为$O(n^2)$。
+主程序复杂度为$O(n)$，整体时间复杂度为$O(n)$。
 
 \subsection{改进设想的经验和体会}
 
 \subsubsection{改进1}
 
-在主程序的这一部分：
-
-\begin{lstlisting}[language={C},
-    numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
-for (int i = 1; i <= n; ++i) // 逐个添加元素
-{
-    addNode(now, i);
-    now = nextNode(now);
-}
-now = list;
-for (int i = 1; i < x; ++i) // 找到第x个元素的前驱
-    now = nextNode(now);
-\end{lstlisting}
-
-可以另用一个指针变量在向链表逐个添加元素的同时记录第$x-1$个元素的位置，以省去第二个循环。优化后的实现如下：
-
-\begin{lstlisting}[language={C},
-    numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
-List temp = NULL;
-for (int i = 1; i <= n; ++i)
-{
-    addNode(now, i);
-    now = nextNode(now);
-    if (i == x - 1) temp = now;
-}
-now = temp;
-\end{lstlisting}
+程序中的各个栈操作都可以直接改成一个数组的正序/逆序的访问。但是空间浪费很严重。并且不符合题目要求。
 
 \section{用户使用说明}
 
@@ -336,7 +276,7 @@ now = temp;
 
 \begin{lstlisting}[language={bash},
     basicstyle=\small\menlo]
-gcc -o main -std=c11 main.c list.c
+gcc -o main -std=c11 main.c stack.c
 \end{lstlisting}
 
 执行可执行文件：

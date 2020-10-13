@@ -3,6 +3,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "stack.h"
 
 int main()
@@ -15,6 +16,11 @@ int main()
         char t = getchar();
         if (t == '#')break; // 输入结束
         if (t == ' ' || t == '\n' || t == '\t')continue; // 跳过空白字符
+        if (t != '0' && t != '1')
+        {
+            puts("Please check your input.");
+            exit(1);
+        }
         pushStack(&s1, t - '0');
     }
     while (!isStackEmpty(s1))
