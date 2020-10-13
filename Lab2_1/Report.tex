@@ -11,7 +11,7 @@
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{fontspec}
-\newfontfamily\menlo{Menlo}
+\newfontfamily\consolas{Consolas}
 \usepackage{xcolor} % 定制颜色
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -106,14 +106,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 110#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 6
 \end{lstlisting}
 
@@ -122,14 +122,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 010111111#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 277
 \end{lstlisting}
 
@@ -138,14 +138,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 0110001010#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 612
 \end{lstlisting}
 
@@ -154,14 +154,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 1101000110010000000101000101100100100001011100110111111111010000001011000101111100010100011100#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 15062005054441346777201305742434
 \end{lstlisting}
 
@@ -170,14 +170,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 112000#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
@@ -197,8 +197,8 @@ Please check your input.
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 \end{lstlisting}
 
 \subsection{主程序的流程}
@@ -230,8 +230,8 @@ Please check your input.
 链表设计中基本操作的伪代码算法如下：
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
@@ -275,21 +275,21 @@ initStack, isStackEmpty, pushStack, getStackTop, popStack, destroyStack函数的
 使用gcc编译生成可执行文件。
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 gcc -o main -std=c11 main.c stack.c
 \end{lstlisting}
 
 执行可执行文件：
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 ./main
 \end{lstlisting}
 
 在Windows cmd下：
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 main
 \end{lstlisting}
 
@@ -310,14 +310,14 @@ main
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 5 -1 2
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
@@ -327,8 +327,8 @@ Please check your input.
 
 \begin{lstlisting}[language={Python},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 a = int(input()[:-1], 2)
 print(oct(a)[2:])
 \end{lstlisting}
@@ -345,8 +345,8 @@ print(oct(a)[2:])
 
 \begin{lstlisting}[language={C++},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -368,8 +368,8 @@ int main()
 
 \begin{lstlisting}[language={C++},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 for i in {1..100}
 do
     sleep 1

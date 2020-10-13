@@ -11,7 +11,7 @@
 \usepackage{amsmath}
 \usepackage{listings}
 \usepackage{fontspec}
-\newfontfamily\menlo{Menlo}
+\newfontfamily\consolas{Consolas}
 \usepackage{xcolor} % 定制颜色
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -110,14 +110,14 @@ language=c++,
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 10 1 3
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 No
 4
 \end{lstlisting}
@@ -127,14 +127,14 @@ No
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 10 3 7
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Yes
 1
 \end{lstlisting}
@@ -144,14 +144,14 @@ Yes
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 100 87 305
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 No
 50
 \end{lstlisting}
@@ -161,14 +161,14 @@ No
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 1000 725 801
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 No
 798
 \end{lstlisting}
@@ -178,14 +178,14 @@ No
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 1 1 3
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
@@ -194,14 +194,14 @@ Please check your input.
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 5 6 3
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
@@ -223,8 +223,8 @@ Please check your input.
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 // 数据对象
 typedef struct node
 {
@@ -308,8 +308,8 @@ void destroyList(List * plist);
 链表设计中基本操作的伪代码算法如下：
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 void initList(List * plist) // 初始化链表
 {    
     给*plist分配内存
@@ -399,8 +399,8 @@ destroyList函数的时间复杂度为$O(n)$，但是由于主程序调用该函
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 for (int i = 1; i <= n; ++i) // 逐个添加元素
 {
     addNode(now, i);
@@ -415,8 +415,8 @@ for (int i = 1; i < x; ++i) // 找到第x个元素的前驱
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 List temp = NULL;
 for (int i = 1; i <= n; ++i)
 {
@@ -433,8 +433,8 @@ now = temp;
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 for (int i = 1; i < n; ++i)
 {
     for (int j = 1; j < y; ++j)
@@ -447,8 +447,8 @@ for (int i = 1; i < n; ++i)
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 for (int i = 1; i < n; ++i)
 {
     for (int j = 1; j <= (y - 1) % (n - i + 1); ++j)
@@ -475,8 +475,8 @@ for (int i = 1; i < n; ++i)
 
 \begin{lstlisting}[language={C},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 #include <stdio.h>
 
 int main()
@@ -498,21 +498,21 @@ int main()
 使用gcc编译生成可执行文件。
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 gcc -o main -std=c11 main.c list.c
 \end{lstlisting}
 
 执行可执行文件：
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 ./main
 \end{lstlisting}
 
 在Windows cmd下：
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 main
 \end{lstlisting}
 
@@ -533,14 +533,14 @@ main
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 10 1 3
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 3
 6
 9
@@ -564,56 +564,56 @@ No
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 5 -1 2
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 5 2 -1
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 1000000 256 512
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 Please check your input.
 \end{lstlisting}
 
 【输入】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 10000 5723 4627
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[language={bash},
-    basicstyle=\small\menlo]
+    basicstyle=\small\consolas]
 No
 5180
 \end{lstlisting}
@@ -632,8 +632,8 @@ No
 
 \begin{lstlisting}[language={C++},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -655,8 +655,8 @@ int main()
 
 \begin{lstlisting}[language={C++},
     numbers=left,
-    numberstyle=\tiny\menlo,
-    basicstyle=\small\menlo]
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
 #include <bits/stdc++.h>
 using namespace std;
 int main()
