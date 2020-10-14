@@ -23,7 +23,7 @@ int main()
     bool flag = true;
     while (!isStackEmpty(s) && !isQueueEmpty(q))
     {
-        if (popQueue(&q) != popStack(&s))
+        if (popQueue(&q) != popStack(&s)) // 比较栈顶元素和队首元素
         {
             flag = false;
             break;

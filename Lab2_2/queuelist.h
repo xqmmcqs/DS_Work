@@ -1,28 +1,29 @@
 //
-// Created by xqmmcqs on 2020/10/7.
+// Created by xqmmcqs on 2020/10/14.
 //
 
-#ifndef LAB2_2_QUEUE_H
-#define LAB2_2_QUEUE_H
+#ifndef LAB2_2_QUEUELIST_H
+#define LAB2_2_QUEUELIST_H
 
-#endif //LAB2_2_QUEUE_H
+#endif //LAB2_2_QUEUELIST_H
 
 #include <stdbool.h>
 
-#define QUEUEINCREASESIZE 100
-
 typedef char ElemType;
+
+typedef struct node
+{
+    ElemType item;
+    struct Node * next;
+} Node;
 
 typedef struct queue
 {
-    ElemType * front;
-    ElemType * rear;
-    ElemType * base;
-    int queuesize;
+    Node * front, * rear;
 } Queue;
 
 /*
- * 操作：初始化队列，分配空间
+ * 操作：初始化队列
  * 后件：q指向一个空队列
  */
 void initQueue(Queue * q);
@@ -37,14 +38,14 @@ bool isQueueEmpty(Queue q);
 /*
  * 操作：将数据元素入队
  * 前件：q指向一个队列
- * 后件：如果入队成功，item成为队尾元素；如果入队之前该队列已满，则重新分配空间
+ * 后件：如果入队成功，item成为队尾元素
  */
 void pushQueue(Queue * q, ElemType item);
 
 /*
  * 操作：队首元素出队
  * 前件：q指向一个队列
- * 后件：如果该队列不为空，队首元素出栈，返回这个出队的元素
+ * 后件：如果该队列不为空，队首元素出队，并且释放其占用的空间，返回这个出队的元素
  */
 ElemType popQueue(Queue * q);
 
@@ -54,4 +55,3 @@ ElemType popQueue(Queue * q);
  * 后件：释放该队列的空间
  */
 void destroyQueue(Queue * q);
-
