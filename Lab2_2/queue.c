@@ -24,7 +24,7 @@ bool isQueueEmpty(Queue q)
 // 将数据元素入队
 void pushQueue(Queue * q, ElemType item)
 {
-    if (q->rear - q->base = q->queuesize) // 队列满
+    if (q->rear - q->base == q->queuesize) // 队列满
     {
         int temp1 = q->front - q->base;
         q->base = (ElemType *) realloc(q->base, (q->queuesize + QUEUEINCREASESIZE) * sizeof(ElemType));
