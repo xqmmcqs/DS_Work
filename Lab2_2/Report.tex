@@ -180,9 +180,168 @@ NO
 
 \subsection{栈的定义}
 
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
+//数据对象
+typedef char ElemType;
+
+typedef struct stack
+{
+    ElemType * top;
+    ElemType * base;
+    int stacksize;
+} Stack;
+
+/*
+ * 操作：初始化栈，分配空间
+ * 后件：s指向一个空栈
+ */
+void initStack(Stack * s);
+
+/*
+ * 操作：判断栈是否为空
+ * 前件：s是一个栈
+ * 后件：如果该栈为空，返回true；否则返回false
+ */
+bool isStackEmpty(Stack s);
+
+/*
+ * 操作：将数据元素入栈
+ * 前件：s指向一个栈
+ * 后件：如果入栈成功，item成为栈顶元素；如果入栈之前该栈已满，则重新分配空间
+ */
+void pushStack(Stack * s, ElemType item);
+
+/*
+ * 操作：获取栈顶元素
+ * 前件：s是一个栈
+ * 后件：如果该栈不为空，返回栈顶元素
+ */
+ElemType getStackTop(Stack s);
+
+/*
+ * 操作：栈顶元素出栈
+ * 前件：s指向一个栈
+ * 后件：如果该栈不为空，栈顶元素出栈，返回这个出栈的元素
+ */
+ElemType popStack(Stack * s);
+
+/*
+ * 操作：释放栈空间
+ * 前件：s指向一个栈
+ * 后件：释放该栈的空间
+ */
+void destroyStack(Stack * s);
+\end{lstlisting}
+
 \subsection{队列的定义（顺序）}
 
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
+//数据对象
+typedef char ElemType;
+
+typedef struct queue
+{
+    ElemType * front;
+    ElemType * rear;
+    ElemType * base;
+    int queuesize;
+} Queue;
+
+/*
+ * 操作：初始化队列，分配空间
+ * 后件：q指向一个空队列
+ */
+void initQueue(Queue * q);
+
+/*
+ * 操作：判断队列是否为空
+ * 前件：q是一个队列
+ * 后件：如果该队列为空，返回true；否则返回false
+ */
+bool isQueueEmpty(Queue q);
+
+/*
+ * 操作：将数据元素入队
+ * 前件：q指向一个队列
+ * 后件：如果入队成功，item成为队尾元素；如果入队之前该队列已满，则重新分配空间
+ */
+void pushQueue(Queue * q, ElemType item);
+
+/*
+ * 操作：队首元素出队
+ * 前件：q指向一个队列
+ * 后件：如果该队列不为空，队首元素出栈，返回这个出队的元素
+ */
+ElemType popQueue(Queue * q);
+
+/*
+ * 操作：释放队列空间
+ * 前件：q指向一个队列
+ * 后件：释放该队列的空间
+ */
+void destroyQueue(Queue * q);
+\end{lstlisting}
+
 \subsection{队列的定义（链式）}
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
+//数据对象
+typedef char ElemType;
+
+typedef struct node
+{
+    ElemType item;
+    struct Node * next;
+} Node;
+
+typedef struct queue
+{
+    Node * front, * rear;
+} Queue;
+
+/*
+ * 操作：初始化队列
+ * 后件：q指向一个空队列
+ */
+void initQueue(Queue * q);
+
+/*
+ * 操作：判断队列是否为空
+ * 前件：q是一个队列
+ * 后件：如果该队列为空，返回true；否则返回false
+ */
+bool isQueueEmpty(Queue q);
+
+/*
+ * 操作：将数据元素入队
+ * 前件：q指向一个队列
+ * 后件：如果入队成功，item成为队尾元素
+ */
+void pushQueue(Queue * q, ElemType item);
+
+/*
+ * 操作：队首元素出队
+ * 前件：q指向一个队列
+ * 后件：如果该队列不为空，队首元素出队，并且释放其占用的空间，返回这个出队的元素
+ */
+ElemType popQueue(Queue * q);
+
+/*
+ * 操作：释放队列空间
+ * 前件：q指向一个队列
+ * 后件：释放该队列的空间
+ */
+void destroyQueue(Queue * q);
+\end{lstlisting}
 
 \subsection{主程序的流程}
 
@@ -261,7 +420,107 @@ void destroyStack(Stack * s)// 释放栈空间
 
 \subsection{队列的实现（顺序）}
 
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
+    
+void initQueue(Queue * q) // 初始化队列，分配空间
+{
+    给q->base分配内存
+    if (q->base 内存分配失败) // 空间分配失败
+        异常退出
+    q->front = q->rear <- q->base //q指向一个空队列
+    q->queuesize <- QUEUEINCREASESIZE
+}
+
+bool isQueueEmpty(Queue q) // 判断队列是否为空
+{
+    if (q.front 和 q.rear 相等) 返回1
+    else 返回0
+}
+
+void pushQueue(Queue * q, ElemType item) // 将数据元素入队
+{
+    if (q->rear 减 q->base 的差与 q->queuesize相等) // 队列满
+    {
+        定义整型temp1 <- q->front - q->base
+        分配给q->base更多的内存
+        if (内存分配失败)
+            异常退出 
+        q->front <- q->base + temp1
+        q->rear <- q->base + q->queuesize
+        q->queuesize <- q->queuesize + QUEUEINCREASESIZE
+    }
+    item入队
+}
+
+ElemType popQueue(Queue * q) // 队首元素出队
+{
+    if (*q队列为空)
+        异常退出
+    返回 *(q->front++)
+}
+
+void destroyQueue(Queue * q)// 释放队列空间
+{
+    释放q->base
+    q->base = q->front = q->rear <- NULL
+    q->queuesize <- 0
+}
+\end{lstlisting}
+
 \subsection{队列的实现（链式）}
+
+\begin{lstlisting}[language={C},
+    numbers=left,
+    numberstyle=\tiny\consolas,
+    basicstyle=\small\consolas]
+    
+void initQueue(Queue * q)// 初始化队列
+{
+    定义* newNode并为其分配内存
+    if (newNode内存分配失败)
+        异常退出
+    q->front = q->rear <- newNode;
+    newNode->item <- 0; // 创建空的头结点
+    newNode->next <- NULL;
+}
+
+bool isQueueEmpty(Queue q) // 判断队列是否为空
+{
+    if (q.front 和 q.rear 相等) 返回1
+    else 返回0
+}
+
+void pushQueue(Queue * q, ElemType item) // 将数据元素入队
+{
+    定义* newNode并为其分配内存
+    if (newNode内存分配失败)
+        异常退出
+    newNode->item <- item;
+    newNode->next <- NULL; // 将newNode作为链表的尾元素
+    q->rear->next <- newNode;
+    q->rear <- newNode; // 将队列尾指向newNode
+}
+
+ElemType popQueue(Queue * q) // 队首元素出队
+{
+    定义Node* nextNode 指向 q->front->next
+    定义ElemType item <- nextNode->item // 出队的是队首指针的下一个元素
+    释放q->front
+    q->front <- nextNode
+    返回 item
+}
+
+void destroyQueue(Queue * q)// 释放队列空间
+{
+    while (队列不为空) 
+        删除队列中剩余的节点
+    释放q->front
+    q->front = q->rear <- NULL
+}
+\end{lstlisting}
 
 \subsection{函数的调用关系图}
 
@@ -269,7 +528,7 @@ void destroyStack(Stack * s)// 释放栈空间
 
 \begin{figure}[htbp]
     
-    %\centering\includegraphics[width=0.4\textwidth]{./Images/pic2_1.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic2_2_2.png}
     
     \caption{函数调用关系图}
     
