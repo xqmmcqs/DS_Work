@@ -335,6 +335,8 @@ void destroyStack(Stack * s)// 释放栈空间
 
 \subsection{函数的调用关系图}
 
+函数的调用关系图如图2。
+
 \begin{figure}[htbp]
     
     \centering\includegraphics[width=0.4\textwidth]{./Images/pic2_2.png}
@@ -368,6 +370,8 @@ $Stack$类型的$top$指针指向栈顶元素的下一个位置，实现时有�
 initStack, isStackEmpty, pushStack, getStackTop, popStack, destroyStack函数的时间复杂度均为$O(1)$。
 
 主程序复杂度为$O(n)$，整体时间复杂度为$O(n)$。
+
+整体空间复杂度为$O(n)$。
 
 \subsection{改进设想的经验和体会}
 
@@ -420,7 +424,7 @@ main
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-1$21#
+1.01#
 \end{lstlisting}
 
 【输出】
@@ -474,7 +478,7 @@ Please check your input.
 
 \subsection{测试第三部分}
 
-使用Python实现2/8进制转换器(test.py)如下：
+使用Python实现2/8进制转换器(testing/test.py)如下：
 
 \begin{lstlisting}[language={Python},
     numbers=left,
@@ -492,7 +496,7 @@ print(oct(a)[2:])
 
 3000组数据中两程序的输出均相同。
 
-数据生成程序(data.cpp)如下：
+数据生成程序(testing/data.cpp)如下：
 
 \begin{lstlisting}[language={C++},
     numbers=left,
@@ -515,7 +519,7 @@ int main()
 }
 \end{lstlisting}
 
-比对脚本(chk.sh)如下：
+比对脚本(testing/chk.sh)如下：
 
 \begin{lstlisting}[language={bash},
     numbers=left,
