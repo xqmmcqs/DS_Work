@@ -5,6 +5,7 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{subfigure}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{extramarks}
@@ -355,22 +356,21 @@ void destroyQueue(Queue * q);
 
 \subsection{各程序模块之间的层次关系}
 
-程序模块层次关系图如图1图二。
+程序模块层次关系图如图1。
 
 \begin{figure}[htbp]
-    
-    \centering\includegraphics[width=0.4\textwidth]{./Images/pic2_2_1.png}
-    
+    \centering
+    \subfigure[栈和队列的顺序实现]{
+        \begin{minipage}[b]{0.4\textwidth}
+            \includegraphics[width=1\textwidth]{./Images/pic2_2_1.png}
+        \end{minipage}
+    }
+    \subfigure[栈和队列的链表实现]{
+        \begin{minipage}[b]{0.4\textwidth}
+            \includegraphics[width=1\textwidth]{./Images/pic2_2_2.png}
+        \end{minipage}
+    }
     \caption{程序模块层次关系}
-    
-\end{figure}
-
-\begin{figure}[htbp]
-    
-    \centering\includegraphics[width=0.4\textwidth]{./Images/pic2_2_2.png}
-    
-    \caption{程序模块层次关系}
-    
 \end{figure}
 
 \section{详细设计}
@@ -432,13 +432,13 @@ void destroyStack(Stack * s)// 释放栈空间
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-    
 void initQueue(Queue * q) // 初始化队列，分配空间
 {
     给q->base分配内存
-    if (q->base 内存分配失败) // 空间分配失败
+    if (q->base 内存分配失败)
         异常退出
-    q->front = q->rear <- q->base //q指向一个空队列
+    q->front <- q->base //q指向一个空队列
+    q->rear <- q->base
     q->queuesize <- QUEUEINCREASESIZE
 }
 
@@ -450,9 +450,9 @@ bool isQueueEmpty(Queue q) // 判断队列是否为空
 
 void pushQueue(Queue * q, ElemType item) // 将数据元素入队
 {
-    if (q->rear 减 q->base 的差与 q->queuesize相等) // 队列满
+    if (队列满)
     {
-        定义整型temp1 <- q->front - q->base
+        temp1 <- q->front - q->base
         分配给q->base更多的内存
         if (内存分配失败)
             异常退出 
@@ -473,7 +473,9 @@ ElemType popQueue(Queue * q) // 队首元素出队
 void destroyQueue(Queue * q)// 释放队列空间
 {
     释放q->base
-    q->base = q->front = q->rear <- NULL
+    q->base <- NULL
+    q->front <- NULL
+    q->rear <- NULL
     q->queuesize <- 0
 }
 \end{lstlisting}
@@ -484,15 +486,14 @@ void destroyQueue(Queue * q)// 释放队列空间
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-    
 void initQueue(Queue * q)// 初始化队列
 {
-    定义* newNode并为其分配内存
+    定义newNode并为其分配内存
     if (newNode内存分配失败)
         异常退出
-    q->front = q->rear <- newNode;
-    newNode->item <- 0; // 创建空的头结点
-    newNode->next <- NULL;
+    q->front = q->rear <- newNode
+    newNode->item <- 0 // 创建空的头结点
+    newNode->next <- NULL
 }
 
 bool isQueueEmpty(Queue q) // 判断队列是否为空
@@ -503,19 +504,19 @@ bool isQueueEmpty(Queue q) // 判断队列是否为空
 
 void pushQueue(Queue * q, ElemType item) // 将数据元素入队
 {
-    定义* newNode并为其分配内存
+    定义newNode并为其分配内存
     if (newNode内存分配失败)
         异常退出
-    newNode->item <- item;
-    newNode->next <- NULL; // 将newNode作为链表的尾元素
-    q->rear->next <- newNode;
-    q->rear <- newNode; // 将队列尾指向newNode
+    newNode->item <- item
+    newNode->next <- NULL // 将newNode作为链表的尾元素
+    q->rear->next <- newNode
+    q->rear <- newNode // 将队列尾指向newNode
 }
 
 ElemType popQueue(Queue * q) // 队首元素出队
 {
-    定义Node* nextNode 指向 q->front->next
-    定义ElemType item <- nextNode->item // 出队的是队首指针的下一个元素
+    nextNode 指向 q->front->next
+    item <- nextNode->item // 出队的是队首指针的下一个元素
     释放q->front
     q->front <- nextNode
     返回 item
@@ -526,13 +527,14 @@ void destroyQueue(Queue * q)// 释放队列空间
     while (队列不为空) 
         删除队列中剩余的节点
     释放q->front
-    q->front = q->rear <- NULL
+    q->front <- NULL
+    q->rear <- NULL
 }
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
 
-函数调用关系图如图3。
+函数调用关系图如图2。
 
 \begin{figure}[htbp]
     
@@ -546,11 +548,7 @@ void destroyQueue(Queue * q)// 释放队列空间
 
 \subsection{调试过程中遇到的问题和思考}
 
-初步实现后，测试样例时发现对于前导零的情况没有处理，遂增加查询栈顶操作，并且在主程序中增加弹出栈顶0元素的循环。
-
-之后对串全为0的情况增加特判。
-
-对于规模较大的数据测试时发现指针会访问到无效位置，发现是realloc操作之后没有更新$top$指针的位置所致。遂增加更新$top$指针的语句。
+调试过程中发现对于数据规模较大的情况，队列的顺序实现中重新分配内存后各指针的值需要更新，于是增加几个语句改正。
 
 \subsection{设计实现的回顾讨论}
 
@@ -564,9 +562,13 @@ void destroyQueue(Queue * q)// 释放队列空间
 
 \subsection{算法复杂度分析}
 
-initStack, isStackEmpty, pushStack, getStackTop, popStack, destroyStack函数的时间复杂度均为$O(1)$。
+队列的链表实现中，destroyList函数的时间复杂度为$O(n)$。
+
+其他函数的时间复杂度均为$O(1)$。
 
 主程序复杂度为$O(n)$，整体时间复杂度为$O(n)$。
+
+整体空间复杂度为$O(n)$。
 
 \subsection{改进设想的经验和体会}
 
@@ -604,11 +606,38 @@ int main()
 
 \section{用户使用说明}
 
+\subsection{栈和队列的顺序实现}
+
 使用gcc编译生成可执行文件。
 
 \begin{lstlisting}[language={bash},
     basicstyle=\small\consolas]
-gcc -o main -std=c11 main.c stack.c
+gcc -o main -std=c11 main.c stack.c queue.c
+\end{lstlisting}
+
+执行可执行文件：
+
+\begin{lstlisting}[language={bash},
+    basicstyle=\small\consolas]
+./main
+\end{lstlisting}
+
+在Windows cmd下：
+
+\begin{lstlisting}[language={bash},
+    basicstyle=\small\consolas]
+main
+\end{lstlisting}
+
+之后通过标准输入输入数据，输入格式参考1.2节的输入描述，结果通过标准输出返回。如果输入合法并且程序正常运行结束，主函数返回值为0。
+
+\subsection{栈和队列的链表实现}
+
+使用gcc编译生成可执行文件。
+
+\begin{lstlisting}[language={bash},
+    basicstyle=\small\consolas]
+gcc -o main -std=c11 main1.c stack.c queuelist.c
 \end{lstlisting}
 
 执行可执行文件：
@@ -629,6 +658,8 @@ main
 
 \section{测试结果}
 
+本题的两种实现方式均通过以下测试。
+
 测试环节分为三个步骤。
 
 \subsection{测试第一部分}
@@ -637,62 +668,50 @@ main
 
 \subsection{测试第二部分}
 
-测试非法输入和边界条件。
+测试边界条件。
 
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-1$21#
+#
 \end{lstlisting}
+
+（认为空串是回文串）
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-Please check your input.
-\end{lstlisting}
-
-【输入】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-0#
-\end{lstlisting}
-
-【输出】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-0
+YES
 \end{lstlisting}
 
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-00000000000000000000#
+1#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-0
+YES
 \end{lstlisting}
 
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-0000000010#
+00#
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-2
+YES
 \end{lstlisting}
 
 \subsection{测试第三部分}
@@ -701,11 +720,11 @@ Please check your input.
 
 测试在macOS\ Catalina\ 10.15.6下进行。
 
-在$LEN<=10$，$LEN<=1000$，$LEN<=1000000$的范围下分别随机生成1000组测试数据，分别传入main和test.py，并且比对两程序的输出。
+在$LEN<=10$，$LEN<=1000$，$LEN<=1000000$的范围下分别随机生成1000组测试数据，分别传入main和test，并且比对两程序的输出。
 
 3000组数据中两程序的输出均相同。
 
-数据生成程序(data.cpp)如下：
+数据生成程序(testing/data.cpp)如下：
 
 \begin{lstlisting}[language={C++},
     numbers=left,
@@ -739,7 +758,7 @@ int main()
 }
 \end{lstlisting}
 
-比对脚本(chk.sh)如下：
+比对脚本(testing/chk.sh)如下：
 
 \begin{lstlisting}[language={bash},
     numbers=left,
