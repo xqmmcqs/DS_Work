@@ -40,7 +40,7 @@ Matrix array2Matrix(int n, int m, long long val[])
         {
             if (val[(i - 1) * m + j])
             {
-                if (a.tot + 1 > a.sizeOfMatrix)
+                if (a.tot + 1 >= a.sizeOfMatrix)
                     expandMatrix(&a);
                 a.data[++a.tot] = (Tuple) {i, j, val[(i - 1) * m + j]};
             }
@@ -90,7 +90,7 @@ Matrix addMatrix(Matrix a, Matrix b)
             }
             if (tempv) // c[i][j]!=0
             {
-                if (c.tot + 1 > c.sizeOfMatrix)
+                if (c.tot + 1 >= c.sizeOfMatrix)
                     expandMatrix(&c);
                 c.data[++c.tot] = (Tuple) {i, tempj, tempv};
             }
@@ -131,7 +131,7 @@ Matrix mulMatrix(Matrix a, Matrix b)
         {
             if (!temp[j]) // c[i][j]==0
                 continue;
-            if (c.tot + 1 > c.sizeOfMatrix)
+            if (c.tot + 1 >= c.sizeOfMatrix)
                 expandMatrix(&c);
             c.data[++c.tot] = (Tuple) {i, j, temp[j]};
         }
