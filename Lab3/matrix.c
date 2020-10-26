@@ -29,7 +29,7 @@ void expandMatrix(Matrix * c)
 }
 
 // 把由一维数组存储的矩阵转化为由三元组表存储的矩阵
-Matrix array2Matrix(int n, int m, int val[])
+Matrix array2Matrix(int n, int m, long long val[])
 {
     Matrix a;
     initMatrix(&a, n, m);
@@ -65,7 +65,8 @@ Matrix addMatrix(Matrix a, Matrix b)
         int p1 = a.pos[i], p2 = b.pos[i];
         while (p1 < a.pos[i + 1] || p2 < b.pos[i + 1]) // 枚举a矩阵和b矩阵第i行的非零元素
         {
-            int tempj, tempv;
+            int tempj;
+            long long tempv;
             if (p2 >= b.pos[i + 1] ||
                 p1 < a.pos[i + 1] && a.data[p1].j < b.data[p2].j) // 如果b矩阵本行没有元素或者a矩阵非零元素列数小于b矩阵非零元素的列数，c[i][j]=a[i][j]
             {
@@ -110,10 +111,12 @@ Matrix mulMatrix(Matrix a, Matrix b)
     initMatrix(&c, a.n, b.m);
     if (!a.tot || !b.tot) // 如果有一个矩阵为空，则返回空矩阵
         return c;
-    int * temp = (int *) calloc(a.m + 1, sizeof(int)); // 临时数组，用于记录c矩阵中每一行的结果
+    long long * temp;
+    if (!(temp = (long long *) calloc(b.m + 1, sizeof(long long)))) // 临时数组，用于记录c矩阵中每一行的结果
+        exit(1);
     for (int i = 1; i <= a.n; ++i)
     {
-        memset(temp, 0, (a.m + 1) * sizeof(int));
+        memset(temp, 0, (b.m + 1) * sizeof(long long));
         c.pos[i] = c.tot + 1;
         for (int p = a.pos[i]; p < a.pos[i + 1]; ++p) // 枚举a矩阵第i行的非零元素
         {
@@ -124,9 +127,9 @@ Matrix mulMatrix(Matrix a, Matrix b)
                 temp[j] += a.data[p].val * b.data[q].val; // c[i][j]+=a[i][k]*b[k][j]
             }
         }
-        for (int j = 1; j <= a.m; ++j)
+        for (int j = 1; j <= b.m; ++j)
         {
-            if (!temp[j]) // c[i][j]!=0
+            if (!temp[j]) // c[i][j]==0
                 continue;
             if (c.tot + 1 > c.sizeOfMatrix)
                 expandMatrix(&c);
@@ -139,9 +142,9 @@ Matrix mulMatrix(Matrix a, Matrix b)
 }
 
 // 把由三元组表存储的矩阵转化为由一维数组存储的矩阵
-void matrix2Array(Matrix a, int val[])
+void matrix2Array(Matrix a, long long val[])
 {
-    memset(val, 0, sizeof(int) * (a.n * a.m + 1));
+    memset(val, 0, sizeof(long long) * (a.n * a.m + 1));
     for (int i = 1; i <= a.tot; ++i)
         val[(a.data[i].i - 1) * a.m + a.data[i].j] = a.data[i].val; // a[i][j]存储在val[(i-1]*m+j]中
 }

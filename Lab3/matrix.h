@@ -11,7 +11,8 @@
 
 typedef struct
 {
-    int i, j, val;
+    int i, j;
+    long long val;
 } Tuple;
 
 typedef struct
@@ -41,7 +42,7 @@ void expandMatrix(Matrix * c);
  * 前件：n>0，m>0，val中存储一个矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
  * 后件：函数返回由三元组表作为存储形式的矩阵
  */
-Matrix array2Matrix(int n, int m, int val[]);
+Matrix array2Matrix(int n, int m, long long val[]);
 
 /*
  * 操作：把两个矩阵相加
@@ -59,10 +60,10 @@ Matrix mulMatrix(Matrix a, Matrix b);
 
 /*
  * 操作：把由三元组表存储的矩阵转化为由一维数组存储的矩阵
- * 前件：a为一个矩阵，val指向一个至少有n*m+1个存储单位的int类型的数组
+ * 前件：a为一个矩阵，val指向一个至少有n*m+1个存储单位的long long类型的数组
  * 后件：val指向由一维数组存储的矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
  */
-void matrix2Array(Matrix a, int val[]);
+void matrix2Array(Matrix a, long long val[]);
 
 /*
  * 操作：释放矩阵空间
