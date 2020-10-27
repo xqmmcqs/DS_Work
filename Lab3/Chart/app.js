@@ -1,7 +1,7 @@
 var testResult = {
     "result": [
         {
-            "zeroLevel": 0.8,
+            "zeroLevel": 0.2,
             "triple": [
                 3.3999791145324707,
                 3.38156795501709,
@@ -416,7 +416,7 @@ var testResult = {
             ]
         },
         {
-            "zeroLevel": 0.2,
+            "zeroLevel": 0.8,
             "triple": [
                 0.5864591598510742,
                 0.5868816375732422,
