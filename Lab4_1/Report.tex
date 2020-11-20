@@ -86,25 +86,17 @@ language=c++,
 
 程序从标准输入中读入数据。
 
-输入一行两个整数$n,m$（$n>0,m>0$），用空格分隔，分别表示A矩阵的行数和列数。
+输入一行字符串$str$（$n>0,m>0$），表示二叉树按先序遍历所得的序列输出。
 
-之后的$n$行，每行$m$个整数，用空格分隔，表示A矩阵。
-
-之后的若干行为B矩阵的信息，格式相同。
+其中*代表前一个非*字符对应的结点左子树或右子树为空。
 
 \subsection{输出描述}
 
 程序向标准输出中输出结果。
 
-输出分为五种情况：
+输出$n$行，每行3个字符，用空格分隔，表示二叉树的结点，结点的左子树和右子树。
 
-\begin{enumerate}
-    \item 输入合法，两个矩阵可以相加、相乘，程序正常运行结束。此时输出矩阵运算的结果。
-    \item 矩阵不能相加，此时没有相加的结果，输出一行一个字符串"Cannot add matrix A and B, An != Bn."或"Cannot add matrix A and B, Am != Bm."或"Cannot add matrix A and B, An != Bn, Am != Bm."（不含引号）
-    \item 矩阵不能相乘，此时没有相乘的结果，输出一行一个字符串"Cannot multiply matrix A and B, Am != Bn."（不含引号）
-    \item $n$或$m$的范围不合法，此时输出一行一个字符串"Please check your input."（不含引号）
-    \item 程序发生运行时错误，比如内存分配失败。此时程序没有输出。
-\end{enumerate}
+其中*代表对应的结点左子树或右子树为空，**代表对应的结点为叶子结点。
 
 \subsection{样例输入输出}
 
@@ -229,7 +221,7 @@ Cannot multiply matrix A and B, Am != Bn.
 
 \subsection{程序功能}
 
-程序判别两个矩阵能否相加/相乘，并完成计算。
+程序通过先序遍历序列生成二叉树，再将二叉树的每个结点及其左右子树依照先序遍历的顺序打印出来。
 
 \section{概要设计}
 
@@ -244,257 +236,115 @@ Cannot multiply matrix A and B, Am != Bn.
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
 //数据对象
-typedef struct
+typedef struct node
 {
-    int i, j;
-    long long val;
-} Tuple;
-
-typedef struct
-{
-    Tuple * data;
-    int * pos; // 每一行中首个非零元素的位置
-    int n, m, tot; // tot为非空元素总数
-    int sizeOfMatrix; // 三元组存储单位的个数
-} Matrix;
+    char data;
+    struct node *lc, *rc;
+} Node;
 
 /*
- * 操作：初始化矩阵
- * 前件：a指向一个空矩阵，n>0，m>0
- * 后件：a指向一个n*m的零矩阵
+ * 操作：生成二叉树
+ * 前件：point指向一棵空树
+ * 后件：point指向一棵树
  */
-void initMatrix(Matrix * a, int n, int m);
+ Node *buildTree();
 
 /*
- * 操作：扩展矩阵的存储空间
- * 前件：c指向一个矩阵
- * 后件：该矩阵扩展MATRIXINCREASESIZE个三元组存储单位
+ * 操作：把二叉树安装先序遍历的顺序输出
+ * 前件：point指向一棵树
+ * 后件：先序输出point指向的树的每一个结点和其左右子树
  */
-void expandMatrix(Matrix * c);
+void preorderTraverse(Node *point);
 
 /*
- * 操作：把由一维数组存储的矩阵转化为由三元组表存储的矩阵
- * 前件：n>0，m>0，val中存储一个矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
- * 后件：函数返回由三元组表作为存储形式的矩阵
+ * 操作：释放二叉树空间
+ * 前件：point指向一棵树
+ * 后件：point指向一棵空树
  */
-Matrix array2Matrix(int n, int m, long long val[]);
+void destroyTree(Node *point);
 
-/*
- * 操作：把两个矩阵相加
- * 前件：a,b为两个矩阵，并且行数和列数都相等
- * 后件：函数返回两个矩阵相加的结果
- */
-Matrix addMatrix(Matrix a, Matrix b);
-
-/*
- * 操作：把两个矩阵相乘
- * 前件：a,b为两个矩阵，并且a的列数和b的行数相等
- * 后件：函数返回两个矩阵相乘的结果
- */
-Matrix mulMatrix(Matrix a, Matrix b);
-
-/*
- * 操作：把由三元组表存储的矩阵转化为由一维数组存储的矩阵
- * 前件：a为一个矩阵，val指向一个至少有n*m+1个存储单位的long long类型的数组
- * 后件：val指向由一维数组存储的矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
- */
-void matrix2Array(Matrix a, long long val[]);
-
-/*
- * 操作：释放矩阵空间
- * 前件：a指向一个矩阵
- * 后件：a指向一个空矩阵
- */
-void destroyMatrix(Matrix * a);
 \end{lstlisting}
 
 \subsection{主程序的流程}
 
 \begin{enumerate}
-    \item 输入，矩阵存入一维数组
-    \item 一维数组存储的矩阵转化为由三元组表存储的矩阵
-    \item 判断矩阵能否相加
-    \item 如果能，则相加，输出
-    \item 判断矩阵能否相乘
-    \item 如果能，则相乘，输出
+    \item 输入
+    \item 生成二叉树
+    \item 依照先序遍历的顺序，输出结点的左右子树
+    \item 继续遍历直到结点的子树为*
     \item 释放空间
 \end{enumerate}
 
-\subsection{各程序模块之间的层次关系}
+%\subsection{各程序模块之间的层次关系}
 
-程序模块层次关系图如图1。
+%程序模块层次关系图如图1。
 
-\begin{figure}[htbp]
+%\begin{figure}[htbp]
 
     % \centering\includegraphics[width=0.4\textwidth]{./Images/pic3_1.png}
 
-    \caption{程序模块层次关系}
+    %\caption{程序模块层次关系}
 
-\end{figure}
+%\end{figure}
 
 \section{详细设计}
 
-\subsection{矩阵的实现}
+\subsection{二叉树的实现}
 
-矩阵的设计中基本操作的伪代码算法如下：
+二叉树的设计中基本操作的伪代码算法如下：
 
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-// 初始化矩阵
-void initMatrix(Matrix * a, int n, int m)
+// 生成二叉树
+Node *buildTree()
 {
-    a->n <- n
-    a->m <- m
-    a->tot <- 0
-    if (给a->pos分配内存失败)
-        异常退出
-    a->sizeOfMatrix <- MATRIXINCREASESIZE
-    if (给a->data分配内存失败)
-        异常退出
+    定义字符 ch <− getchar()
+    if (ch为'*')
+        返回空指针
+    定义结点 *point 并分配内存
+    point->data <− ch
+    point->lc <− buildTree()
+    point->rc <− buildTree()
+    返回 point
 }
     
-// 扩展矩阵的存储空间
-void expandMatrix(Matrix * c)
+// 先序遍历二叉树并输出
+void preorderTraverse(Node *point)
 {
-    if (给c->data分配内存失败)
-        异常退出
-    c->sizeOfMatrix <- c->sizeOfMatrix + MATRIXINCREASESIZE
+    printf("%c ", point->data)
+    if (point->lc不为空)
+        printf("%c ", point->lc->data)
+    else printf("*")
+    if (point->rc不为空)
+        printf("%c ", point->rc->data)
+    else printf("*")
+    puts("") //换行
+    if (point->lc不为空)
+        preorderTraverse(point->lc) //继续遍历左子树
+    if (point->rc不为空)
+        preorderTraverse(point->rc) //继续遍历左子树
 }
 
-// 把由一维数组存储的矩阵转化为由三元组表存储的矩阵
-Matrix array2Matrix(int n, int m, long long val[])
+// 释放树空间
+void destroyTree(Node *point)
 {
-    定义矩阵a并初始化
-    for (i = 1 to n)
-    {
-        a.pos[i] <- a.tot + 1
-        for (j = 1 to m)
-        {
-            if (val[(i - 1) * m + j]不为零)
-            {
-                if (矩阵a的存储空间不足)
-                    扩展矩阵a的存储空间
-                a.data[++a.tot] <- (Tuple) {i, j, val[(i - 1) * m + j]}
-            }
-        }
-    }
-    a.pos[n + 1] <- a.tot + 1
-    返回a
-}
-
-// 两个矩阵相加
-Matrix addMatrix(Matrix a, Matrix b)
-{
-    if (两个矩阵的行列大小不相等) 
-        异常退出
-    定义矩阵c并初始化
-    if (有一个矩阵为空)
-        返回空矩阵c
-    for (i = 1 to a.n)
-    {
-        c.pos[i] <- c.tot + 1
-        p1 <- a.pos[i] 
-        p2 <- b.pos[i]
-        while (p1 < a.pos[i + 1] 或 p2 < b.pos[i + 1]) // 枚举a矩阵和b矩阵第i行的非零元素
-        {
-            定义tempj,tempy // 用于记录c矩阵中每一个位置加法的结果
-            if (b矩阵本行没有元素 或 a矩阵非零元素列数小于b矩阵非零元素的列数) 
-            {
-                tempj <- a.data[p1].j
-                tempv <- a.data[p1].val
-                ++p1
-            }
-            else if (a矩阵本行没有元素 或 b矩阵非零元素列数小于a矩阵非零元素的列数) 
-            {
-                tempj <- b.data[p2].j
-                tempv <- b.data[p2].val
-                ++p2
-            }
-            else 
-            {
-                tempj <- a.data[p1].j
-                tempv <- a.data[p1].val + b.data[p2].val
-                ++p1
-                ++p2
-            }
-            if (c[i][j]不为0)
-            {
-                if (矩阵c存储空间不足)
-                    扩展矩阵的存储空间
-                c.data[++c.tot] <- (Tuple) {i, tempj, tempv}
-            }
-        }
-    }
-    c.pos[c.n + 1] <- c.tot + 1
-    返回c
-}
-
-// 两个矩阵相乘
-Matrix mulMatrix(Matrix a, Matrix b)
-{
-    if (第一个矩阵的列数不等于第二个矩阵的行数) // 两个矩阵不可相乘
-        异常退出
-    定义矩阵c并初始化
-    if (有一个矩阵为空)
-        返回空矩阵c
-    定义临时数组temp并分配内存 // 临时数组，用于记录c矩阵中每一行的结果
-    for (i = 1 to a.n)
-    {
-        temp数组清零
-        c.pos[i] <- c.tot + 1
-        for (p = a.pos[i] to a.pos[i + 1] - 1) // 枚举a矩阵第i行的非零元素
-        {
-            k <- a.data[p].j // a矩阵的该非零元素为a[i][k]
-            for (q = b.pos[k] to b.pos[k + 1] - 1) // 枚举b矩阵第k行的非零元素
-            {
-                j <- b.data[q].j // b矩阵的该非零元素为b[k][j]
-                temp[j] <- temp[j] + a.data[p].val * b.data[q].val
-            }
-        }
-        for (j = 1 to b.m)
-        {
-            if (c[i][j]不等于0) 
-            {
-                if (矩阵c存储空间不足)
-                    扩展矩阵的存储空间
-                c.data[++c.tot] <- (Tuple) {i, tempj, tempv}
-            }
-        }
-    }
-    c.pos[c.n + 1] <- c.tot + 1
-    释放temp
-    返回c
-}
-
-// 把由三元组表存储的矩阵转化为由一维数组存储的矩阵
-void matrix2Array(Matrix a, long long val[])
-{
-    val数组清零
-    for (i = 1 to a.tot)
-        val[(a.data[i].i - 1) * a.m + a.data[i].j] <- a.data[i].val; // a[i][j]存储在val[(i-1]*m+j]中
-}
-
-// 释放矩阵空间
-void destroyMatrix(Matrix * a)
-{
-    释放a->pos
-    释放a->data
-    a->n <- 0
-    a->m <- 0
-    a->tot <- 0
-    a->sizeOfMatrix <- 0
+    if (point->lc不为空)
+        destroyTree(point->lc)
+    if (point->rc不为空)
+        destroyTree(point->rc)
+    释放point
 }
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
 
-函数调用关系图如图2。
+函数调用关系图如图1。
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic3_2.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_1_1.png}
 
     \caption{函数调用关系图}
 
