@@ -52,6 +52,13 @@ void destroyTree(Node *point)
 int main()
 {
     Node *root = buildTree();
+    puts("\n");
+    puts("--------------------");
+    puts("|** 选择程序功能 **|");
+    puts("--------------------");
+    puts("(1) 压缩");
+    puts("(2) 解压");
+    puts("");
     preorderTraverse(root);
     destroyTree(root);
     return 0;

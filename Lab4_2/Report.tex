@@ -90,12 +90,19 @@ language=c++,
 
 程序向给定的二进制文件中输出结果，向标准输出中输出提示。
 
-压缩文件分为若干个部分，每个部分包含如下信息：原字符串中包含的不同字符的个数、哈夫曼树的部分信息、原字符串的长度、压缩后位串的长度、编码后的位串。
+压缩文件分为若干个部分，每个部分包含如下信息：
+
+\begin{enumerate}
+    \item 原字符串中包含的不同字符的个数；
+    \item 哈夫曼树中每个节点存储的字符（非叶结点不存储字符）、结点左右孩子的序号；
+    \item 原字符串的长度、压缩后位串的长度；
+    \item 编码后的位串。
+\end{enumerate}
 
 输出分为五种情况：
 
 \begin{enumerate}
-    \item 输入合法，程序正常运行结束，此时结果存储在给定的二进制文件中。
+    \item 输入合法，程序正常运行结束，此时结果存储在给定的二进制文件中，并在标准输出中打印提示信息。
     \item 输入不合法，程序向标准输出打印错误信息，并且要求重新输入或异常退出。
     \item 程序发生运行时错误，比如内存分配失败。此时程序没有输出。
 \end{enumerate}
@@ -104,216 +111,226 @@ language=c++,
 
 \subsection{样例输入输出}
 
+由于压缩后的二进制文件难以阅读，故通过转换程序（./bit2string.c)将该压缩文件转化成容易阅读的形式展现在本实验报告中，将不同数据以空格或换行符分隔，原本按每8位存储的位串转化成01字符串。
+
 \subsubsection{样例输入输出1}
+
+压缩。
 
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-2 2
-3 0
-0 7
-2 2
-4 6
-0 8
+aaababcd
 \end{lstlisting}
 
 【输出】
 
+（'\#'后的内容为注释）
+
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-7 6 
-0 15 
-12 18 
-0 56 
+4     # 出现的不同字符的个数/哈夫曼树叶结点的个数
+c     # 一个叶结点，其中存储字符c，没有左右孩子 
+d
+b
+a
+1 2   # 一个非叶结点，不存储字符，左右孩子分别是1、2
+3 5
+4 6
+8 2   # 原串的长度，压缩后字符串的长度（2个字节）
+0001001011011100 # 压缩后的位串
 \end{lstlisting}
 
 \subsubsection{样例输入输出2}
 
+压缩。
+
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-8 8
-282 0 708 0 449 0 0 39
-685 79 0 0 385 0 638 0
-745 0 244 0 658 795 0 0
-923 985 0 0 0 0 152 0
-602 167 0 0 0 143 0 0
-568 233 35 0 0 0 0 0
-0 0 284 0 310 23 0 625
-542 0 303 293 286 0 387 510
-8 8
-578 781 779 0 0 0 0 0
-0 531 0 940 106 464 0 735
-346 141 287 273 0 746 804 665
-917 0 0 0 0 0 409 788
-0 0 176 784 0 383 13 879
-927 881 899 146 118 0 0 709
-42 84 0 254 0 0 90 0
-552 0 0 955 0 0 0 0
+!#$""$#$"$$"!!"!$$#"$#"$"$!$#$!"!$!#"#!""#"!!!#"##"!$$$"#"$"$"$#!$$"$#!"#$##!!"#"#!!##!#$"!""$!"!#$$
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-860 781 1487 0 449 0 0 39 
-685 610 0 940 491 464 638 735 
-1091 141 531 273 658 1541 804 665 
-1840 985 0 0 0 0 561 788 
-602 167 176 784 0 526 13 879 
-1495 1114 934 146 118 0 0 709 
-42 84 284 254 310 23 90 625 
-1094 0 303 1248 286 0 387 510 
-429492 320070 501898 582545 0 700135 575069 865491 
-422726 630526 601375 538152 8374 184111 62425 396480 
-1251999 1316644 1480896 698554 93810 434038 204730 1304297 
-539878 1256666 719017 964508 104410 457040 13680 723975 
-480517 684822 597515 177858 34576 77488 0 224132 
-340414 572266 452517 228575 24698 134222 28140 194530 
-464585 60307 156745 920805 2714 330594 232366 477657 
-984569 498533 559515 892291 0 335576 401997 683773
+4
+#
+!
+"
+$
+1 2
+3 4
+5 6
+100 25
+010011101011001110111110010110011111001011001011101101110011011001110100100001101000100101010010000010011111111000
+10111011101100011111101100011000110000010110001000010100000100111001101011011001001111
 \end{lstlisting}
 
 \subsubsection{样例输入输出3}
 
+压缩。
+
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-2 3
-1 6 0
-3 0 7
-3 1
-5
-0
-8
+1>8#2$'&'-).1%2/1:)/,8;2!3>(/69",#&7;>#$</%'=-=>+2#5&>!)5;(<96&;>0,7,;:/.)7$$/%5-(67933<(';==4464!12
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-Cannot add matrix A and B, An != Bn, Am != Bm.
-5 
-71 
+29
+"
++
+0
+.
+:
+8
+-
+5
+9
+<
+!
+4
+3
+%
+)
+'
+&
+$
+#
+=
+7
+6
+1
+,
+(
+2
+>
+;
+/
+1 2
+3 30
+4 5
+6 31
+7 8
+9 10
+11 12
+13 14
+15 32
+16 17
+18 19
+20 21
+22 23
+24 25
+26 33
+27 34
+28 35
+29 36
+37 38
+39 40
+41 42
+43 44
+45 46
+47 48
+49 50
+51 52
+53 54
+55 56
+100 60
+111110100001101101100101101011000110011100001010101101011101111110101001010001111110111110110100000000011001100010
+100101010001000001100011110011100011110000011011110011110101100100110111101001111100010101110001110001010111000100
+001111100101101101011110010100100101011001011011000010111101110111101100101100100001110000011101000001101011111000
+101110101101110111010110101000101010101101010000111110111010111010100101000111100011100001101110011100100111001111
+110100111001011111001000
 \end{lstlisting}
 
 \subsubsection{样例输入输出4}
 
+解压。
+
 【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-4 2
-2 5
-0 3
-2 0
-7 0
-1 3
-1 0 6
+4
+c
+d
+b
+a
+1 2
+3 5
+4 6
+8 2
+0001001011011100
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-Cannot add matrix A and B, An != Bn, Am != Bm.
-Cannot multiply matrix A and B, Am != Bn.
+aaababcd
+\end{lstlisting}
+
+\subsubsection{样例输入输出5}
+
+解压。
+
+【输入】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+4
+#
+!
+"
+$
+1 2
+3 4
+5 6
+100 25
+010011101011001110111110010110011111001011001011101101110011011001110100100001101000100101010010000010011111111000
+10111011101100011111101100011000110000010110001000010100000100111001101011011001001111
+\end{lstlisting}
+
+【输出】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+!#$""$#$"$$"!!"!$$#"$#"$"$!$#$!"!$!#"#!""#"!!!#"##"!$$$"#"$"$"$#!$$"$#!"#$##!!"#"#!!##!#$"!""$!"!#$$
 \end{lstlisting}
 
 \subsection{程序功能}
 
-程序判别两个矩阵能否相加/相乘，并完成计算。
+对于压缩过程，程序构造哈夫曼树并且对文件进行压缩，将需要的解码信息和压缩后的位串保存到压缩文件中。
+
+对于解压过程，程序从压缩文件中读入解码信息和位串，并利用哈夫曼树进行解压。
 
 \section{概要设计}
 
 \subsection{问题解决的思路}
 
-使用三元组表存储稀疏矩阵，并且设计三元组表形式的矩阵加法和乘法算法、一维数组存储的矩阵和三元组表存储的矩阵之间的转化算法。
+构造哈夫曼树进行压缩、解压过程。
 
-\subsection{矩阵的定义}
+\subsection{哈夫曼编码的设计}
 
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-//数据对象
-typedef struct
-{
-    int i, j;
-    long long val;
-} Tuple;
-
-typedef struct
-{
-    Tuple * data;
-    int * pos; // 每一行中首个非零元素的位置
-    int n, m, tot; // tot为非空元素总数
-    int sizeOfMatrix; // 三元组存储单位的个数
-} Matrix;
-
-/*
- * 操作：初始化矩阵
- * 前件：a指向一个空矩阵，n>0，m>0
- * 后件：a指向一个n*m的零矩阵
- */
-void initMatrix(Matrix * a, int n, int m);
-
-/*
- * 操作：扩展矩阵的存储空间
- * 前件：c指向一个矩阵
- * 后件：该矩阵扩展MATRIXINCREASESIZE个三元组存储单位
- */
-void expandMatrix(Matrix * c);
-
-/*
- * 操作：把由一维数组存储的矩阵转化为由三元组表存储的矩阵
- * 前件：n>0，m>0，val中存储一个矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
- * 后件：函数返回由三元组表作为存储形式的矩阵
- */
-Matrix array2Matrix(int n, int m, long long val[]);
-
-/*
- * 操作：把两个矩阵相加
- * 前件：a,b为两个矩阵，并且行数和列数都相等
- * 后件：函数返回两个矩阵相加的结果
- */
-Matrix addMatrix(Matrix a, Matrix b);
-
-/*
- * 操作：把两个矩阵相乘
- * 前件：a,b为两个矩阵，并且a的列数和b的行数相等
- * 后件：函数返回两个矩阵相乘的结果
- */
-Matrix mulMatrix(Matrix a, Matrix b);
-
-/*
- * 操作：把由三元组表存储的矩阵转化为由一维数组存储的矩阵
- * 前件：a为一个矩阵，val指向一个至少有n*m+1个存储单位的long long类型的数组
- * 后件：val指向由一维数组存储的矩阵，矩阵元素a[i][j]存储在val[(i-1)*m+j]中
- */
-void matrix2Array(Matrix a, long long val[]);
-
-/*
- * 操作：释放矩阵空间
- * 前件：a指向一个矩阵
- * 后件：a指向一个空矩阵
- */
-void destroyMatrix(Matrix * a);
 \end{lstlisting}
 
 \subsection{主程序的流程}
 
 \begin{enumerate}
-    \item 输入，矩阵存入一维数组
-    \item 一维数组存储的矩阵转化为由三元组表存储的矩阵
-    \item 判断矩阵能否相加
-    \item 如果能，则相加，输出
-    \item 判断矩阵能否相乘
-    \item 如果能，则相乘，输出
-    \item 释放空间
+    \item 获取输入，判断是否合法
+    \item 如果合法，则调用压缩/解压函数
 \end{enumerate}
 
 \subsection{各程序模块之间的层次关系}
@@ -330,158 +347,14 @@ void destroyMatrix(Matrix * a);
 
 \section{详细设计}
 
-\subsection{矩阵的实现}
+\subsection{哈夫曼编码的实现}
 
-矩阵的设计中基本操作的伪代码算法如下：
+哈夫曼编码的设计中基本操作的伪代码算法如下：
 
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-// 初始化矩阵
-void initMatrix(Matrix * a, int n, int m)
-{
-    a->n <- n
-    a->m <- m
-    a->tot <- 0
-    if (给a->pos分配内存失败)
-        异常退出
-    a->sizeOfMatrix <- MATRIXINCREASESIZE
-    if (给a->data分配内存失败)
-        异常退出
-}
-    
-// 扩展矩阵的存储空间
-void expandMatrix(Matrix * c)
-{
-    if (给c->data分配内存失败)
-        异常退出
-    c->sizeOfMatrix <- c->sizeOfMatrix + MATRIXINCREASESIZE
-}
-
-// 把由一维数组存储的矩阵转化为由三元组表存储的矩阵
-Matrix array2Matrix(int n, int m, long long val[])
-{
-    定义矩阵a并初始化
-    for (i = 1 to n)
-    {
-        a.pos[i] <- a.tot + 1
-        for (j = 1 to m)
-        {
-            if (val[(i - 1) * m + j]不为零)
-            {
-                if (矩阵a的存储空间不足)
-                    扩展矩阵a的存储空间
-                a.data[++a.tot] <- (Tuple) {i, j, val[(i - 1) * m + j]}
-            }
-        }
-    }
-    a.pos[n + 1] <- a.tot + 1
-    返回a
-}
-
-// 两个矩阵相加
-Matrix addMatrix(Matrix a, Matrix b)
-{
-    if (两个矩阵的行列大小不相等) 
-        异常退出
-    定义矩阵c并初始化
-    if (有一个矩阵为空)
-        返回空矩阵c
-    for (i = 1 to a.n)
-    {
-        c.pos[i] <- c.tot + 1
-        p1 <- a.pos[i] 
-        p2 <- b.pos[i]
-        while (p1 < a.pos[i + 1] 或 p2 < b.pos[i + 1]) // 枚举a矩阵和b矩阵第i行的非零元素
-        {
-            定义tempj,tempy // 用于记录c矩阵中每一个位置加法的结果
-            if (b矩阵本行没有元素 或 a矩阵非零元素列数小于b矩阵非零元素的列数) 
-            {
-                tempj <- a.data[p1].j
-                tempv <- a.data[p1].val
-                ++p1
-            }
-            else if (a矩阵本行没有元素 或 b矩阵非零元素列数小于a矩阵非零元素的列数) 
-            {
-                tempj <- b.data[p2].j
-                tempv <- b.data[p2].val
-                ++p2
-            }
-            else 
-            {
-                tempj <- a.data[p1].j
-                tempv <- a.data[p1].val + b.data[p2].val
-                ++p1
-                ++p2
-            }
-            if (c[i][j]不为0)
-            {
-                if (矩阵c存储空间不足)
-                    扩展矩阵的存储空间
-                c.data[++c.tot] <- (Tuple) {i, tempj, tempv}
-            }
-        }
-    }
-    c.pos[c.n + 1] <- c.tot + 1
-    返回c
-}
-
-// 两个矩阵相乘
-Matrix mulMatrix(Matrix a, Matrix b)
-{
-    if (第一个矩阵的列数不等于第二个矩阵的行数) // 两个矩阵不可相乘
-        异常退出
-    定义矩阵c并初始化
-    if (有一个矩阵为空)
-        返回空矩阵c
-    定义临时数组temp并分配内存 // 临时数组，用于记录c矩阵中每一行的结果
-    for (i = 1 to a.n)
-    {
-        temp数组清零
-        c.pos[i] <- c.tot + 1
-        for (p = a.pos[i] to a.pos[i + 1] - 1) // 枚举a矩阵第i行的非零元素
-        {
-            k <- a.data[p].j // a矩阵的该非零元素为a[i][k]
-            for (q = b.pos[k] to b.pos[k + 1] - 1) // 枚举b矩阵第k行的非零元素
-            {
-                j <- b.data[q].j // b矩阵的该非零元素为b[k][j]
-                temp[j] <- temp[j] + a.data[p].val * b.data[q].val
-            }
-        }
-        for (j = 1 to b.m)
-        {
-            if (c[i][j]不等于0) 
-            {
-                if (矩阵c存储空间不足)
-                    扩展矩阵的存储空间
-                c.data[++c.tot] <- (Tuple) {i, tempj, tempv}
-            }
-        }
-    }
-    c.pos[c.n + 1] <- c.tot + 1
-    释放temp
-    返回c
-}
-
-// 把由三元组表存储的矩阵转化为由一维数组存储的矩阵
-void matrix2Array(Matrix a, long long val[])
-{
-    val数组清零
-    for (i = 1 to a.tot)
-        val[(a.data[i].i - 1) * a.m + a.data[i].j] <- a.data[i].val; // a[i][j]存储在val[(i-1]*m+j]中
-}
-
-// 释放矩阵空间
-void destroyMatrix(Matrix * a)
-{
-    释放a->pos
-    释放a->data
-    a->n <- 0
-    a->m <- 0
-    a->tot <- 0
-    a->sizeOfMatrix <- 0
-}
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
