@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         puts("");
         while (true)
         {
-            puts("输入你的选择 [1-3]: ");
+            printf("输入你的选择 [1-3]: ");
             scanf("%3s", op);
             if (strlen(op) > 1 || op[0] != '1' && op[0] != '2')
                 puts("输入有误，请重新输入");
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
         FILE *inputFile = NULL, *outputFile = NULL;
         while (true)
         {
-            puts("输入输入文件的路径 （不超过80个字符）: ");
+            printf("输入输入文件的路径 （不超过80个字符）: ");
             scanf("%80s", inputFileName);
             if (!(inputFile = fopen(inputFileName, "rb")))
                 puts("输入有误，请重新输入");
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
-            puts("输入输出文件的路径 （不超过80个字符）: ");
+            printf("输入输出文件的路径 （不超过80个字符）: ");
             scanf("%80s", outputFileName);
             if (!(outputFile = fopen(outputFileName, "wb")))
                 puts("输入有误，请重新输入");
