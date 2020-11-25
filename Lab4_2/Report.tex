@@ -107,53 +107,53 @@ language=c++,
     \item 程序发生运行时错误，比如内存分配失败。此时程序没有输出。
 \end{enumerate}
 
-关于更多细节请参考5\ 用户使用说明部分。
+关于更多细节请参考第5节。
 
 \subsection{样例输入输出}
 
-由于压缩后的二进制文件难以阅读，故通过转换程序（./bit2string.c)将该压缩文件转化成容易阅读的形式展现在本实验报告中，将不同数据以空格或换行符分隔，原本按每8位存储的位串转化成01字符串。
+由于压缩后的二进制文件难以阅读，故通过转换程序（testing/bit2string.c)将该压缩文件转化成容易阅读的形式展现在本实验报告中，将不同数据以空格或换行符分隔，原本按每8位存储的位串转化成01字符串。
 
 \subsubsection{样例输入输出1}
 
 压缩。
 
-【输入】
+【输入】(samples/sample1.in)
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
 aaababcd
 \end{lstlisting}
 
-【输出】
+【输出】(samples/sample1.out)
 
 （'\#'后的内容为注释）
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-4     # 出现的不同字符的个数/哈夫曼树叶结点的个数
-c     # 一个叶结点，其中存储字符c，没有左右孩子 
+4     #出现的不同字符的个数/哈夫曼树叶结点的个数
+c     #一个叶结点，其中存储字符c，没有左右孩子 
 d
 b
 a
-1 2   # 一个非叶结点，不存储字符，左右孩子分别是1、2
+1 2   #一个非叶结点，不存储字符，左右孩子分别是1、2
 3 5
 4 6
-8 2   # 原串的长度，压缩后字符串的长度（2个字节）
-0001001011011100 # 压缩后的位串
+8 2   #原串的长度，压缩后字符串的长度（2个字节）
+0001001011011100 #压缩后的位串
 \end{lstlisting}
 
 \subsubsection{样例输入输出2}
 
 压缩。
 
-【输入】
+【输入】(samples/sample2.in)
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
 !#$""$#$"$$"!!"!$$#"$#"$"$!$#$!"!$!#"#!""#"!!!#"##"!$$$"#"$"$"$#!$$"$#!"#$##!!"#"#!!##!#$"!""$!"!#$$
 \end{lstlisting}
 
-【输出】
+【输出】(samples/sample2.out)
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
@@ -174,14 +174,14 @@ $
 
 压缩。
 
-【输入】
+【输入】(samples/sample3.in)
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
 1>8#2$'&'-).1%2/1:)/,8;2!3>(/69",#&7;>#$</%'=-=>+2#5&>!)5;(<96&;>0,7,;:/.)7$$/%5-(67933<(';==4464!12
 \end{lstlisting}
 
-【输出】
+【输出】(samples/sample3.out)
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
@@ -253,7 +253,7 @@ $
 
 \subsubsection{样例输入输出4}
 
-解压。
+解压。（对应样例1）
 
 【输入】
 
@@ -280,7 +280,7 @@ aaababcd
 
 \subsubsection{样例输入输出5}
 
-解压。
+解压。（对应样例2）
 
 【输入】
 
@@ -324,6 +324,27 @@ $
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
+// 数据对象
+typedef struct node
+{
+    char data;
+    int cnt;
+    unsigned char parent, lc, rc; // 哈夫曼树双亲、孩子结点的下标
+} Node;
+
+/*
+ * 操作：编码
+ * 前件：inputFile和outputFile分别指向输入、输出文件
+ * 后件：将编码结果输出到outputFile指向的文件中
+ */
+void encode(FILE * inputFile, FILE * outputFile);
+
+/*
+ * 操作：解码
+ * 前件：inputFile和outputFile分别指向输入、输出文件
+ * 后件：将解码结果输出到outputFile指向的文件中
+ */
+void decode(FILE * inputFile, FILE * outputFile);
 \end{lstlisting}
 
 \subsection{主程序的流程}
@@ -373,33 +394,42 @@ $
 
 \subsection{调试过程中遇到的问题和思考}
 
-程序在一些小细节中出现了问题，比如$val$数组需要多分配一个空间，矩阵相乘后$c$矩阵的列数等于$b$矩阵的列数。
+由于对二进制文件的输入、输出不熟悉，曾尝试使用printf和scanf函数进行输入输出，了解相关知识后改为调用fread和
+fwrite函数。
 
-初次实现矩阵相加算法时设计有误，使得两个矩阵的某个对应位置只要有一个为零，就会忽略这个位置，这个问题通过if判断修复。
+在解码的过程中feof函数经常出现探测文件末尾不准确，故改为判断fread函数是否为0来结束循环。
 
-在随机测试中发现数据规模较大时结果很容易超出int类型的范围，故矩阵元素采用long long类型。
+在构造哈夫曼树的过程中由于判断条件过于复杂，出现错误；改为了更简洁的判断条件。
+
+在写入到压缩文件之前，压缩码需要以'0'/'1'字符串的形式存储，否则调用各种字符串函数会出现错误。
+
+编码以8位压缩到一个字节当中，写入和读取的时候注意高低位的顺序。
 
 \subsection{设计实现的回顾讨论}
 
-由于二维数组的内存分配、函数传参较为复杂，所以输入、输出时使用一维数组存储的矩阵。
+编码是每次从二进制文件中读入1024个字节，创建编码表并且压缩。
 
-期望矩阵的规模不超过$10^3$，所以$MATRIXINCREASESIZE$常量的值设置为$10^5$。
+由于哈夫曼树结点数较少，所以存储下标时采用unsigned char类型，写入压缩文件时可以节省空间。
+
+对于没有出现过的字符显然不需要编码。调用库函数qsort对权值进行排序。
+
+哈夫曼树采取顺序存储结构，前$n$个结点为叶节点，之后$n-1$个结点为非叶节点，每次构造新的非叶节点时只需要比较
+叶节点中权值最小的两个结点和非叶节点中权值最小的两个结点，从中挑出权值最小的两个结点即可，使得查找结点的时间
+复杂度降低到$O(1)$
+
+压缩后的串为一个01串，将其每8位压缩到一个字节并写入压缩文件。
 
 \subsection{算法复杂度分析}
 
-initMatrix, expandMatrix, destroyMatrix函数的复杂度为$O(1)$
+encode,decode函数的复杂度为$O(len)$，其中$len$为字符串长度。
 
-array2Matrix, matrix2Array, addMatrix函数的复杂度为$O(n^2)$，mulMatrix函数的复杂度为$O(n^3)$，视矩阵的稀疏程度，算法的时间复杂度会有常数级别的优化。在本报告的最后部分有讨论。
-
-主函数的时间复杂度为$O(n^2)$，整体时间复杂度为$O(n^3)$。
-
-整体空间复杂度为$O(n^2)$。
+主函数的时间复杂度为$O(1)$，整体时间复杂度为$O(len)$。
 
 \subsection{改进设想的经验和体会}
 
 \subsubsection{改进1}
 
-可以在输入/输出时简化数组存储的矩阵和三元组表存储的矩阵之间转化的过程，会有常数级别的优化。
+可以通过进一步压缩位（比如去掉一定为0的某些位）来使得压缩率更高，但是效果不明显。
 
 \section{用户使用说明}
 

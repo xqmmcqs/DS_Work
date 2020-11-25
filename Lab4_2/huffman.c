@@ -58,7 +58,7 @@ void encode(FILE * inputFile, FILE * outputFile)
                 t1 += 2;
             }
             else if (t1 == tot + 1 || t2 + 1 < i && huffmanTree[t2].cnt < huffmanTree[t1].cnt &&
-                                huffmanTree[t2 + 1].cnt < huffmanTree[t1].cnt) // t2、t2+1是最小和次小的
+                                      huffmanTree[t2 + 1].cnt < huffmanTree[t1].cnt) // t2、t2+1是最小和次小的
             {
                 huffmanTree[i].cnt = huffmanTree[t2].cnt + huffmanTree[t2 + 1].cnt;
                 huffmanTree[i].lc = t2;
@@ -95,7 +95,8 @@ void encode(FILE * inputFile, FILE * outputFile)
             tempString[len] = 0;
             for (int j = i, k = huffmanTree[j].parent; k; j = k, k = huffmanTree[k].parent)
                 tempString[--len] = (huffmanTree[k].rc == j) + '0'; // 为了便于拷贝工作，存储为字符'0'和'1'
-            huffmanCode[huffmanTree[i].data] = (char *) calloc(tot - len + 1, sizeof(char));
+            if (!(huffmanCode[huffmanTree[i].data] = (char *) calloc(tot - len + 1, sizeof(char))))
+                exit(1);
             strcpy(huffmanCode[huffmanTree[i].data], tempString + len);
         }
         // 将原字符串翻译为哈夫曼编码，每个字节内存储一个'0'/'1'

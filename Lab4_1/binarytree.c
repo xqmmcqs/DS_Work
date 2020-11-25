@@ -15,8 +15,11 @@ Node * buildTree()
     char ch = getchar();
     if (ch == '*')
         return NULL;
-    Node * point = (Node *) calloc(1, sizeof(Node));
+    Node * point;
+    if (!(point = (Node *) calloc(1, sizeof(Node))))
+        exit(1);
     point->data = ch;
+    // 计算二叉树的图形中该点的位置
     if (point->lc = buildTree())
         point->pos += point->lc->pos;
     else
@@ -66,10 +69,10 @@ void printGraph(Node * point)
     Node * que[100];
     int h = 1, t = 1;
     que[1] = point;
-    while (h <= t)
+    while (h <= t) // 按层输出
     {
         int cur = 1;
-        for (int k = h; k <= t; ++k)
+        for (int k = h; k <= t; ++k) // 每层的第一行：输出结点的字符数据
         {
             while (cur < que[k]->pos)
             {
@@ -81,7 +84,7 @@ void printGraph(Node * point)
         }
         puts("");
         cur = 1;
-        for (int k = h; k <= t; ++k)
+        for (int k = h; k <= t; ++k) // 每层的第二行：输出根节点下的斜杠和反斜杠，以及下划线
         {
             if (que[k]->lc)
             {
@@ -117,7 +120,7 @@ void printGraph(Node * point)
         puts("");
         int ed = t;
         cur = 1;
-        for (int k = h; k <= ed; ++k)
+        for (int k = h; k <= ed; ++k) // 每层的第三行：输出孩子结点上的斜杠和反斜杠，孩子结点入队
         {
             if (que[k]->lc)
             {

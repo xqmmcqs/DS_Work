@@ -327,3 +327,5 @@ CMakeLists.txt
 cmake-build-debug
 
 *.dSYM
+
+!sample*
