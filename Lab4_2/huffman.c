@@ -38,6 +38,13 @@ void encode(FILE * inputFile, FILE * outputFile)
                 tot = i;
                 break;
             }
+        if (tot == 1) // 处理只用一种字符的情况
+        {
+            fwrite(&tot, sizeof(int), 1, outputFile);
+            fwrite(inputString + 1, sizeof(char), 1, outputFile);
+            fwrite(&n, sizeof(int), 1, outputFile); // 写入原字符串的长度
+            continue;
+        }
         // 建立哈夫曼树
         for (int i = tot - 1; ~i; --i) // 建立tot个叶结点
         {
@@ -140,6 +147,15 @@ void decode(FILE * inputFile, FILE * outputFile)
         int tot; // 哈夫曼树中叶结点数目
         if (!fread(&tot, sizeof(int), 1, inputFile))
             break; // 读到文件结束
+        if (tot == 1) // 处理只用一种字符的情况
+        {
+            char ch;
+            int n;
+            fread(&ch, sizeof(char), 1, inputFile);
+            fread(&n, sizeof(int), 1, inputFile);
+            while (n--)fwrite(&ch, sizeof(char), 1, outputFile);
+            continue;
+        }
         // 读取哈夫曼树的部分信息
         for (int i = 1; i <= tot; ++i)
         {

@@ -255,43 +255,76 @@ void destroyTree(Node * point);
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
 // 生成二叉树
-Node *buildTree()
+// 建二叉树
+Node * buildTree()
 {
-    定义字符 ch <− getchar()
+    读入字符ch
     if (ch为'*')
         返回空指针
-    定义结点 *point 并分配内存
-    point->data <− ch
-    point->lc <− buildTree()
-    point->rc <− buildTree()
-    返回 point
-}
-    
-// 先序遍历二叉树并输出
-void preorderTraverse(Node *point)
-{
-    printf("%c ", point->data)
-    if (point->lc不为空)
-        printf("%c ", point->lc->data)
-    else printf("*")
-    if (point->rc不为空)
-        printf("%c ", point->rc->data)
-    else printf("*")
-    puts("") //换行
-    if (point->lc不为空)
-        preorderTraverse(point->lc) //继续遍历左子树
-    if (point->rc不为空)
-        preorderTraverse(point->rc) //继续遍历左子树
+    创建新节点，并用point指针指向它，如果内存分配失败，异常退出
+    point->data <- ch
+    分别建point的左子树和右子树，并且更新lc和rc指针
+    计算二叉树的图形中该点的位置
+    每两个叶结点之间需要空出8个字符的宽度
+    度为1的结点的空子树也要空出8个字符的宽度
+    非叶结点的位置为两个孩子结点位置的平均值
+    返回point
 }
 
-// 释放树空间
-void destroyTree(Node *point)
+// 先序遍历
+void preOrderTraverse(Node * point)
 {
-    if (point->lc不为空)
-        destroyTree(point->lc)
-    if (point->rc不为空)
-        destroyTree(point->rc)
-    释放point
+    输出point->data
+    if (point的左子树不为空)
+        preOrderTraverse(point->lc);
+    if (point的右子树不为空)
+        preOrderTraverse(point->rc);
+}
+
+// 中序遍历
+void inOrderTraverse(Node * point)
+{
+    if (point的左子树不为空)
+        inOrderTraverse(point->lc);
+    输出point->data
+    if (point的右子树不为空)
+        inOrderTraverse(point->rc);
+}
+
+// 后序遍历
+void postOrderTraverse(Node * point)
+{
+    if (point的左子树不为空)
+        postOrderTraverse(point->lc);
+    if (point的右子树不为空)
+        postOrderTraverse(point->rc);
+    输出point->data
+}
+
+// 输出二叉树图形
+void printGraph(Node * point)
+{
+    定义队列和队列的头指针、尾指针
+    初始化队列中的唯一一个元素为根结点
+    while (h <= t)
+    {
+        每层的图形第一行：输出该层结点的字符数据，并用空格补齐间距
+        换行
+        每层图形的第二行：输出根节点下的斜杠和反斜杠，以及代表边下划线，并用空格补齐间距
+        换行
+        每层图形的第三行：输出孩子结点上的斜杠和反斜杠，孩子结点入队，并用空格补齐间距
+        换行
+    }
+}
+
+// 释放二叉树空间
+void destroyTree(Node * point)
+{
+    if (point的左子树不为空)
+        destroyTree(point->lc);
+    if (point的右子树不为空)
+        destroyTree(point->rc);
+    释放point指针
 }
 \end{lstlisting}
 

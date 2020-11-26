@@ -104,7 +104,7 @@ language=c++,
 \begin{enumerate}
     \item 输入合法，程序正常运行结束，此时结果存储在给定的二进制文件中，并在标准输出中打印提示信息。
     \item 输入不合法，程序向标准输出打印错误信息，并且要求重新输入或异常退出。
-    \item 程序发生运行时错误，比如内存分配失败。此时程序没有输出。
+    \item 程序发生运行时错误，比如内存分配失败、指定的输入/输出文件无法打开。此时程序没有输出。
 \end{enumerate}
 
 关于更多细节请参考第5节。
@@ -376,6 +376,74 @@ void decode(FILE * inputFile, FILE * outputFile);
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
+void encode(FILE * inputFile, FILE * outputFile)
+{
+    while (true)
+    {
+        从inputFile读入长度最长为1024字符串
+        如果读到文件结束，退出循环
+        cnt数组用来记录各个字符出现的次数，将其初始化
+        统计各个字符出现次数（权值）
+        按照权值从大到小对cnt数组排序
+        从前往后，找到字符串的字符集的大小，设为tot
+        创建tot个哈夫曼树叶结点（哈夫曼树采用顺序存储，权值小的字符在前）
+        创建tot-1个非叶节点：
+        t1 <- 1 目前没有双亲节点的权值最小的叶节点的下标
+        t2 <- tot + 1 目前没有双亲节点的权值最小的非叶节点的下标
+        for (int i = tot + 1 to 2 * tot + 1)
+        {
+            在t1、t1+1、t2、t2+2四个结点中选取权值最小的两个结点
+            创建新的结点，左孩子和右孩子为刚刚选取的节点
+            更新两个结点的双亲以及相应的指针
+        }
+        将tot写入文件
+        将哈夫曼树叶节点存储的字符依次写入outputFile
+        将哈夫曼树非叶节点的左右孩子结点的下标依次写入outputFile
+        将原字符串的长度写入outputFile
+        for (int i = 1 to tot)
+        {
+            从叶结点开始，逆向求每个字符的哈夫曼编码，作为'0'/'1'字符串写入tempString
+            在huffmanCode数组（编码表）中分配位置，拷贝编码
+        }
+        将原字符串按照编码表编码，将编码结果写入tempString字符串中
+        将tempString字符串的长度补全到8的倍数
+        将tempString字符串每8个字符压缩到一个字节，写入到outputString中
+        将编码后的字符串长度写入outputFile
+        将outputString写入outputFile
+        释放huffmanCode的空间
+    }
+}
+void decode(FILE * inputFile, FILE * outputFile)
+{
+    while (true)
+    {
+        从inputFile读入tot
+        如果读到文件结束，退出循环
+        读入tot个叶节点的信息，复原哈夫曼树
+        读入tot-1个非叶节点的信息，复原哈夫曼树
+        读入原字符串的长度和编码后字符串的长度
+        读入编码后的字符串inputString
+        cur <- 2 * tot - 1 指针，表示当前在哈夫曼树中的结点下标
+        for (int i = 0 to n-1)
+        {
+            for (int j = 0 to 7)
+            {
+                获取当前位的值temp
+                if (temp)
+                    cur指向当前结点的右孩子
+                else
+                    cur指向当前结点的左孩子
+                if (找到了叶节点)
+                {
+                    将解码出的字符写入到outputFile
+                    if (解码完了所有字符)
+                        break;
+                    cur恢复指向根结点
+                }
+            }
+        }
+    }
+}
 \end{lstlisting}
 
 \subsection{函数的调用关系图}
@@ -419,6 +487,9 @@ fwrite函数。
 
 压缩后的串为一个01串，将其每8位压缩到一个字节并写入压缩文件。
 
+对于只有一种字符的情况，由于无法建立哈夫曼树，所以压缩文件中只存储tot、该字符、原字符串的长度。编码和解码是均
+对这种情况特殊处理。
+
 \subsection{算法复杂度分析}
 
 encode,decode函数的复杂度为$O(len)$，其中$len$为字符串长度。
@@ -437,7 +508,7 @@ encode,decode函数的复杂度为$O(len)$，其中$len$为字符串长度。
 
 \begin{lstlisting}[language={bash},
     basicstyle=\small\consolas]
-gcc -o main -std=c11 main.c matrix.c
+gcc -o main -std=c11 main.c huffman.c
 \end{lstlisting}
 
 执行可执行文件：
@@ -454,7 +525,19 @@ gcc -o main -std=c11 main.c matrix.c
 main
 \end{lstlisting}
 
-之后通过标准输入输入数据，输入格式参考1.2节的输入描述，结果通过标准输出返回。如果输入合法并且程序正常运行结束，主函数返回值为0。
+之后将数据写入到指定文件中，可以通过标准输入选择选项，也可以通过执行可执行文件时传递参数来选择选项：
+
+\begin{enumerate}
+    \item 如果执行可执行文件时没有传递参数，则可以根据标准输入的提示选择压缩/解压功能，以及指定输入和输出文件的位置
+    \item 执行可执行文件时传递的参数：第一个参数为1或2，表示选择压缩/解压，之后两个参数分别为输入文件的路径和输出文件的路径，例如，执行
+\begin{lstlisting}[language={bash},
+    basicstyle=\small\consolas]
+./main 1 ./input.in ./output.out
+\end{lstlisting}
+    表示执行压缩功能，输入文件为本目录下的input.in，输出文件为本目录下的output.out
+\end{enumerate}
+
+通过标准输出打印提示信息。如果输入合法并且程序正常运行结束，主函数返回值为0。
 
 \section{测试结果}
 
@@ -468,105 +551,37 @@ main
 
 测试边界条件。
 
-【输入】
+【输入】(samples/sample4.in)
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-1 0
-1 1
-2
-\end{lstlisting}
+（空文件）
 
-【输出】
+【输出】(samples/sample4.out)
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-Please check your input.
-\end{lstlisting}
+（空文件）
 
-【输入】
+【输入】(samples/sample5.in)
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-4 3
-7 0 6
-0 0 5
-1 0 0
-0 0 2
-3 3
-5 7 0
-0 3 0
-1 3 5
-\end{lstlisting}
+文件内容为1000000个字符a
 
-【输出】
+【输出】(samples/sample5.out)
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-Cannot add matrix A and B, An != Bn.
-41 67 30 
-5 15 25 
-5 7 0 
-2 6 10 
-\end{lstlisting}
+压缩结果为一个8873字节的二进制文件。
 
 【输入】
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-3 3
-7 0 6
-1 0 4
-1 0 0
-3 4
-5 7 0 1
-0 3 0 0
-1 3 5 0
-\end{lstlisting}
+上一个例子的输出。
 
-【输出】
+【输出】(samples/sample6.out)
 
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-Cannot add matrix A and B, Am != Bm.
-41 67 30 7 
-9 19 20 1 
-5 7 0 1 
-\end{lstlisting}
-
-【输入】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-3 4
-7 0 6 4
-1 0 4 0
-1 0 0 6
-3 4
-5 7 0 1
-0 3 0 0
-1 3 5 0
-\end{lstlisting}
-
-【输出】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-12 7 6 5 
-1 3 4 0 
-2 3 5 6 
-Cannot multiply matrix A and B, Am != Bn.
-\end{lstlisting}
+解压与sample5.in相同。
 
 \subsection{测试第三部分}
 
-将原解法与二维数组实现的矩阵加法和乘法(testing/test.c)比对。
+测试在macOS\ Big\ Sur\ 11.0.1下进行。
 
-测试在macOS\ Catalina\ 10.15.6下进行。
+在$len<=10$，$len<=100$，$n<=1000000$的范围下分别随机生成1000组测试数据，进行压缩和解压操作，并且比对解压结果和原始输入是否相同。
 
-在$n<=10$，$n<=100$，$n<=1000$的范围下分别随机生成1000组测试数据，分别传入main和test，并且比对两程序的输出。
-
-3000组数据中两程序的输出均相同。
+3000组数据中没有出现错误。
 
 数据生成程序(testing/data.cpp)如下：
 
@@ -577,29 +592,19 @@ Cannot multiply matrix A and B, Am != Bn.
 #include <bits/stdc++.h>
 using namespace std;
 
-const int SIZE = 1e3, PERCENT = 50;
-
-int main()
+int main(int argc, char *argv[])
 {
     srand(time(0));
-    int n = rand() % SIZE + 1;
-    printf("%d %d\n", n, n);
+    FILE *file = fopen("./raw.in", "wb");
+    int n = atoi(argv[1]), m = atoi(argv[2]);
     for (int i = 1; i <= n; ++i)
-    {
-        for (int j = 1; j <= n; ++j)
-            printf("%d ", rand() % 100 > PERCENT ? 0 : rand() % 1000 + 1);
-        puts("");
-    }
-    printf("%d %d\n", n, n);
-    for (int i = 1; i <= n; ++i)
-    {
-        for (int j = 1; j <= n; ++j)
-            printf("%d ", rand() % 100 > PERCENT ? 0 : rand() % 1000 + 1);
-        puts("");
-    }
+        fprintf(file, "%c", rand() % m + 32);
+    fclose(file);
     return 0;
 }
 \end{lstlisting}
+
+传入两个参数，第一个参数是字符串的长度，第二个参数是字符集的大小。
 
 比对脚本(testing/chk.sh)如下：
 
@@ -607,13 +612,13 @@ int main()
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-for i in {1..1000}
+for i in {1..100}
 do
     sleep 1
-    ./data >in.in
-    ./main <in.in >out.out
-    ./test <in.in >out1.out
-    if ! diff out.out out1.out
+    ./data 100000 5
+    ./main 1 raw.in encode.out
+    ./main 2 encode.out decode.out
+    if ! diff raw.in decode.out
     then
         break
     fi
