@@ -14,25 +14,25 @@ int cmp(int * a, int * b);
 // 编码
 void encode(FILE * inputFile, FILE * outputFile)
 {
-    Node huffmanTree[260]; // 哈夫曼树
-    char * huffmanCode[130] = {0}; // 哈夫曼编码表
+    Node huffmanTree[520]; // 哈夫曼树
+    char * huffmanCode[260] = {0}; // 哈夫曼编码表
     char inputString[1100]; // 输入字符串
     char tempString[8200];
     char outputString[1100]; // 输出字符串
-    int cnt[130][2]; // 各字符权值
+    int cnt[260][2]; // 各字符权值
     while (true)
     {
         // 输入字符串，统计各字符的权值
         int n = fread(inputString + 1, sizeof(char), 1024, inputFile); // 读取字符串，获取字符串长度
         if (!n)
             break; // 读到文件结束
-        for (int i = 0; i <= 127; ++i)
+        for (int i = 0; i <= 255; ++i)
             cnt[i][0] = i, cnt[i][1] = 0;
         for (int i = 1; i <= n; ++i)
             cnt[inputString[i]][1]++;
-        qsort(cnt, 128, sizeof(int) * 2, cmp); // 按照权值从大到小排序
+        qsort(cnt, 256, sizeof(int) * 2, cmp); // 按照权值从大到小排序
         int tot = 0; // 哈夫曼树中叶结点数目
-        for (int i = 0; i <= 127; ++i) // 找到第一个权值为0的字符
+        for (int i = 0; i <= 255; ++i) // 找到第一个权值为0的字符
             if (!cnt[i][1])
             {
                 tot = i;
@@ -83,7 +83,6 @@ void encode(FILE * inputFile, FILE * outputFile)
                 t2++;
             }
             huffmanTree[i].parent = 0;
-            huffmanTree[i].data = -1;
         }
         fwrite(&tot, sizeof(int), 1, outputFile); // 写入哈夫曼树中叶结点的数目
         // 将哈夫曼树的一部分信息写进压缩文件中
@@ -91,8 +90,8 @@ void encode(FILE * inputFile, FILE * outputFile)
             fwrite(&huffmanTree[i].data, sizeof(char), 1, outputFile);
         for (int i = tot + 1; i <= 2 * tot - 1; ++i)
         {
-            fwrite(&huffmanTree[i].lc, sizeof(unsigned char), 1, outputFile);
-            fwrite(&huffmanTree[i].rc, sizeof(unsigned char), 1, outputFile);
+            fwrite(&huffmanTree[i].lc, sizeof(short), 1, outputFile);
+            fwrite(&huffmanTree[i].rc, sizeof(short), 1, outputFile);
         }
         fwrite(&n, sizeof(int), 1, outputFile); // 写入原字符串的长度
         // 从叶结点开始逆向求各字符的哈夫曼编码
@@ -140,7 +139,7 @@ void encode(FILE * inputFile, FILE * outputFile)
 // 解码
 void decode(FILE * inputFile, FILE * outputFile)
 {
-    Node huffmanTree[260]; // 哈夫曼树
+    Node huffmanTree[520]; // 哈夫曼树
     char inputString[1100]; // 输入字符串
     while (true)
     {
@@ -165,8 +164,8 @@ void decode(FILE * inputFile, FILE * outputFile)
         for (int i = tot + 1; i <= 2 * tot - 1; ++i)
         {
             huffmanTree[i].data = -1;
-            fread(&huffmanTree[i].lc, sizeof(unsigned char), 1, inputFile);
-            fread(&huffmanTree[i].rc, sizeof(unsigned char), 1, inputFile);
+            fread(&huffmanTree[i].lc, sizeof(short), 1, inputFile);
+            fread(&huffmanTree[i].rc, sizeof(short), 1, inputFile);
         }
         int len; // 原字符串长度
         int n; // 压缩后字符串长度
@@ -178,7 +177,7 @@ void decode(FILE * inputFile, FILE * outputFile)
         {
             for (int j = 0; j < 8; ++j)
             {
-                char temp = (unsigned char)inputString[i] % 2;
+                char temp = (char)inputString[i] % 2;
                 inputString[i] >>= 1;
                 putchar(temp + '0');
             }
@@ -197,7 +196,7 @@ void decode(FILE * inputFile, FILE * outputFile)
                     cur = huffmanTree[cur].rc;
                 else
                     cur = huffmanTree[cur].lc;
-                if (~huffmanTree[cur].data) // 找到了叶节点
+                if (!huffmanTree[cur].lc && !huffmanTree[cur].rc) // 找到了叶节点
                 {
                     fwrite(&huffmanTree[cur].data, sizeof(char), 1, outputFile);
                     if (++cnt == len) // 解码完了所有字符

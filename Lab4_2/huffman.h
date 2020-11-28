@@ -11,7 +11,7 @@ typedef struct node
 {
     char data;
     int cnt;
-    unsigned char parent, lc, rc;
+    short parent, lc, rc;
 } Node;
 
 /*

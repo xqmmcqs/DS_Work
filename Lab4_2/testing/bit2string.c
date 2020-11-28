@@ -25,9 +25,9 @@ int main(int argc, char *argv[])
         }
         for (int i = tot + 1; i <= 2 * tot - 1; ++i)
         {
-            fread(&tempchar, sizeof(unsigned char), 1, inputFile);
+            fread(&tempchar, sizeof(short), 1, inputFile);
             printf("%d ", tempchar);
-            fread(&tempchar, sizeof(unsigned char), 1, inputFile);
+            fread(&tempchar, sizeof(short), 1, inputFile);
             printf("%d\n", tempchar);
         }
         int len; // 原字符串长度
