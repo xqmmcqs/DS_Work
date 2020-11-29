@@ -360,7 +360,7 @@ void decode(FILE * inputFile, FILE * outputFile);
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic3_1.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_2_1.png}
 
     \caption{程序模块层次关系}
 
@@ -452,7 +452,7 @@ void decode(FILE * inputFile, FILE * outputFile)
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic3_2.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_2_2.png}
 
     \caption{函数调用关系图}
 
@@ -477,7 +477,7 @@ fwrite函数。
 
 编码是每次从二进制文件中读入1024个字节，创建编码表并且压缩。
 
-由于哈夫曼树结点数较少，所以存储下标时采用unsigned char类型，写入压缩文件时可以节省空间。
+由于哈夫曼树结点数较少，所以存储下标时采用short类型，写入压缩文件时可以节省空间。
 
 对于没有出现过的字符显然不需要编码。调用库函数qsort对权值进行排序。
 
@@ -632,47 +632,41 @@ done
 
 \section{可视化}
 
-随机生成若干组数据，由三元组表实现和二维数组实现分别计算，比对运行时间，并且使用JavaScript将结果可视化。
+随机生成若干组数据，使用该程序进行压缩，记录不同数据规模下的平均压缩率，并且使用JavaScript将结果可视化。
 
-比对脚本(testing/timecount.py)如下：
+比对脚本(testing/test.py)如下：
 
 \begin{lstlisting}[language={python},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
 import os
-import json
 import time
-a = []
-b = []
-for i in range(100):
-    os.system("./data >in.in")
-    starttime = time.time()
-    os.system("./main <in.in >out.out")
-    endtime = time.time()
-    a.append(endtime-starttime)
-    starttime = time.time()
-    os.system("./test <in.in >out1.out")
-    endtime = time.time()
-    b.append(endtime-starttime)
-    print(i)
 
-json_str = json.dumps([a, b])
-with open("80%result.json", mode="w") as file:
-    file.write(json_str)
+with open("./result.txt", "w") as file:
+    for i in (10, 30, 50, 100, 500, 1000, 10000, 1000000):
+        for j in (3, 6, 10, 20, 30, 50, 95):
+            tot = 0
+            for k in range(100):
+                time.sleep(1)
+                os.system("./data {0} {1}".format(i, j))
+                os.system("./main 1 raw.in out.out")
+                tot += os.path.getsize("./out.out") / \
+                    os.path.getsize("./raw.in")
+            file.write("[{0}, {1}, {2}],\n".format(i, j, str(tot / 10)[:9]))
 \end{lstlisting}
 
 数据规模如下：
 
-$n=1000$，$20\%$的元素是0、$50\%$的元素是0、$80\%$的元素是0的数据各100组，共300组数据。
+$len=10,30,50,100,500,1000,10000,1000000$，字符集大小$=3,6,10,20,30,60,95$的数据各100组，共5600组数据。
 
 \subsubsection{实现细节}
 
-利用已有的时间数据，使用Highcharts库绘制二维柱状图，比较两种算法的运行时间差距。
+利用已有的压缩率数据，使用Highcharts库绘制散点图。
 
 \subsubsection{用户使用说明}
 
-使用现代浏览器打开Chart/index.html，即可看到柱状图，将鼠标指针放到某个柱上可以看到对应的值。
+使用现代浏览器打开Scatter/index.html，即可看到散点图，将鼠标指针放到某个点上可以看到对应的数据值，拖动图表可以从不同角度观察数据分布。
 
 \subsubsection{示例}
 
@@ -680,7 +674,7 @@ $n=1000$，$20\%$的元素是0、$50\%$的元素是0、$80\%$的元素是0的数
 
 \begin{figure}[htbp]
     
-    % \centering\includegraphics[width=0.9\textwidth]{./Images/pic3_3.png}
+    \centering\includegraphics[width=0.9\textwidth]{./Images/pic4_2_3.png}
     
     \caption{可视化示例}
     
@@ -688,6 +682,6 @@ $n=1000$，$20\%$的元素是0、$50\%$的元素是0、$80\%$的元素是0的数
 
 \subsubsection{结论}
 
-可以看出在规模较大的数据中，相比二维数组的实现，三元组表的实现在绝大多数情况下都有明显的性能优势，并且当矩阵越稀疏时性能优势越明显。
+可以观察到在字符串长度较小的时候和字符集大小较大的时候压缩率有明显上升，理想情况下在字符集大小在20以内，字符串大小在100以上会有比较好的压缩效果。
 
 \end{document}

@@ -234,11 +234,11 @@ void destroyTree(Node * point);
 
 \subsection{各程序模块之间的层次关系}
 
-程序模块层次关系图如图1。
+程序模块层次关系图如图5。
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic3_1.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_1_1.png}
 
     \caption{程序模块层次关系}
 
@@ -330,11 +330,11 @@ void destroyTree(Node * point)
 
 \subsection{函数的调用关系图}
 
-函数调用关系图如图1。
+函数调用关系图如图6。
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_1_1.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_1_2.png}
 
     \caption{函数调用关系图}
 
@@ -418,62 +418,22 @@ main
 
 \section{可视化}
 
-随机生成若干组数据，由三元组表实现和二维数组实现分别计算，比对运行时间，并且使用JavaScript将结果可视化。
+使用JavaScript实现二叉树的构建，调用d3.js库实现可视化。
 
-比对脚本(testing/timecount.py)如下：
+\subsection{用户使用说明}
 
-\begin{lstlisting}[language={python},
-    numbers=left,
-    numberstyle=\tiny\consolas,
-    basicstyle=\small\consolas]
-import os
-import json
-import time
-a = []
-b = []
-for i in range(100):
-    os.system("./data >in.in")
-    starttime = time.time()
-    os.system("./main <in.in >out.out")
-    endtime = time.time()
-    a.append(endtime-starttime)
-    starttime = time.time()
-    os.system("./test <in.in >out1.out")
-    endtime = time.time()
-    b.append(endtime-starttime)
-    print(i)
+使用现代浏览器打开Visualization/index.html，输入字符串，即可看到可视化结果。
 
-json_str = json.dumps([a, b])
-with open("80%result.json", mode="w") as file:
-    file.write(json_str)
-\end{lstlisting}
+\subsection{示例}
 
-数据规模如下：
-
-$n=1000$，$20\%$的元素是0、$50\%$的元素是0、$80\%$的元素是0的数据各100组，共300组数据。
-
-\subsubsection{实现细节}
-
-利用已有的时间数据，使用Highcharts库绘制二维柱状图，比较两种算法的运行时间差距。
-
-\subsubsection{用户使用说明}
-
-使用现代浏览器打开Chart/index.html，即可看到柱状图，将鼠标指针放到某个柱上可以看到对应的值。
-
-\subsubsection{示例}
-
-见图3。
+见图8。
 
 \begin{figure}[htbp]
     
-    % \centering\includegraphics[width=0.9\textwidth]{./Images/pic3_3.png}
+    \centering\includegraphics[width=0.9\textwidth]{./Images/pic4_1_3.png}
     
     \caption{可视化示例}
     
 \end{figure}
-
-\subsubsection{结论}
-
-可以看出在规模较大的数据中，相比二维数组的实现，三元组表的实现在绝大多数情况下都有明显的性能优势，并且当矩阵越稀疏时性能优势越明显。
 
 \end{document}
