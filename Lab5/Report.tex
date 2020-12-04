@@ -194,33 +194,53 @@ aaababcd
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
 // 数据对象
-typedef struct node
+typedef struct edge
 {
-    char data;
-    int cnt;
-    short parent, lc, rc; // 哈夫曼树双亲、孩子结点的下标
-} Node;
+    int v, val;
+    struct edge * next;
+} Edge;
+
+extern int n, m; // n为点数，m为边数
+extern int * ind; // 各个顶点的入度
+extern int * dist; // 源点至各个顶点的最短距离
+extern int * par; // 源点至此点的最短路径中，上一个顶点的编号
+extern Edge ** firstEdge;
 
 /*
- * 操作：编码
- * 前件：inputFile和outputFile分别指向输入、输出文件
- * 后件：将编码结果输出到outputFile指向的文件中
+ * 操作：初始化有向无环图
+ * 后件：初始化firstEdge、ind、dist、par数组
  */
-void encode(FILE * inputFile, FILE * outputFile);
+void initGraph();
 
 /*
- * 操作：解码
- * 前件：inputFile和outputFile分别指向输入、输出文件
- * 后件：将解码结果输出到outputFile指向的文件中
+ * 操作：向图中加入弧
+ * 前件：u,v是弧尾、弧头的编号，val是弧的权值
+ * 后件：图中加入这条边
  */
-void decode(FILE * inputFile, FILE * outputFile);
+void addEdge(int u, int v, int val);
+
+/*
+ * 操作：有向无环图的拓扑排序，求出dist和par数组的值
+ * 前件：firstEdge中存储有向无环图的信息
+ * 后件：dist中存储源点至各个点的最短距离，par中记录最短路径
+ */
+void topologicalSort();
+
+/*
+ * 操作：释放有向无环图的空间
+ * 后件：释放各条边的空间，以及firstEdge、ind、dist、par数组的空间
+ */
+void destroyGraph();
 \end{lstlisting}
 
 \subsection{主程序的流程}
 
 \begin{enumerate}
-    \item 获取输入，判断是否合法
-    \item 如果合法，则调用压缩/解压函数
+    \item 获取输入，判断是否构成图
+    \item 如果能构成图，则初始化图，后向图中加入弧
+    \item 将有向无环图拓扑排序，记录源点到各个顶点的最短距离和至该点的上一顶点的编号
+    \item 比较最短距离，找到图中的最长路径，并根据顶点编号输出路径
+    \item 释放有向无环图的空间
 \end{enumerate}
 
 \subsection{各程序模块之间的层次关系}
@@ -229,7 +249,7 @@ void decode(FILE * inputFile, FILE * outputFile);
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_2_1.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic5_1.png}
 
     \caption{程序模块层次关系}
 
@@ -237,81 +257,73 @@ void decode(FILE * inputFile, FILE * outputFile);
 
 \section{详细设计}
 
-\subsection{哈夫曼编码的实现}
+\subsection{图的实现}
 
-哈夫曼编码的设计中基本操作的伪代码算法如下：
+有向无环图的设计中基本操作的伪代码算法如下：
 
 \begin{lstlisting}[language={C},
     numbers=left,
     numberstyle=\tiny\consolas,
     basicstyle=\small\consolas]
-void encode(FILE * inputFile, FILE * outputFile)
+// 初始化有向无环图
+void initGraph()
 {
-    while (true)
-    {
-        从inputFile读入长度最长为1024字符串
-        如果读到文件结束，退出循环
-        cnt数组用来记录各个字符出现的次数，将其初始化
-        统计各个字符出现次数（权值）
-        按照权值从大到小对cnt数组排序
-        从前往后，找到字符串的字符集的大小，设为tot
-        创建tot个哈夫曼树叶结点（哈夫曼树采用顺序存储，权值小的字符在前）
-        创建tot-1个非叶节点：
-        t1 <- 1 目前没有双亲节点的权值最小的叶节点的下标
-        t2 <- tot + 1 目前没有双亲节点的权值最小的非叶节点的下标
-        for (int i = tot + 1 to 2 * tot + 1)
-        {
-            在t1、t1+1、t2、t2+2四个结点中选取权值最小的两个结点
-            创建新的结点，左孩子和右孩子为刚刚选取的节点
-            更新两个结点的双亲以及相应的指针
-        }
-        将tot写入文件
-        将哈夫曼树叶节点存储的字符依次写入outputFile
-        将哈夫曼树非叶节点的左右孩子结点的下标依次写入outputFile
-        将原字符串的长度写入outputFile
-        for (int i = 1 to tot)
-        {
-            从叶结点开始，逆向求每个字符的哈夫曼编码，作为'0'/'1'字符串写入tempString
-            在huffmanCode数组（编码表）中分配位置，拷贝编码
-        }
-        将原字符串按照编码表编码，将编码结果写入tempString字符串中
-        将tempString字符串的长度补全到8的倍数
-        将tempString字符串每8个字符压缩到一个字节，写入到outputString中
-        将编码后的字符串长度写入outputFile
-        将outputString写入outputFile
-        释放huffmanCode的空间
-    }
+    初始化firstEdge、ind、dist、par数组并分配内存
+    if (内存分配失败)
+        异常退出
 }
-void decode(FILE * inputFile, FILE * outputFile)
+
+// 向图中加入边
+void addEdge(int u, int v, int val)
 {
-    while (true)
-    {
-        从inputFile读入tot
-        如果读到文件结束，退出循环
-        读入tot个叶节点的信息，复原哈夫曼树
-        读入tot-1个非叶节点的信息，复原哈夫曼树
-        读入原字符串的长度和编码后字符串的长度
-        读入编码后的字符串inputString
-        cur <- 2 * tot - 1 指针，表示当前在哈夫曼树中的结点下标
-        for (int i = 0 to n-1)
+    设置临时边temp存放待加入的边
+    if (内存分配失败)
+        异常退出
+    temp->val <- val
+    temp->v <- v
+    temp->next <- firstEdge[u]
+    firstEdge[u] <- temp
+    v的入度+1
+}
+
+// 有向无环图的拓扑排序
+void topologicalSort()
+{
+    定义 * stac, tot <- -1
+    if (stac内存分配失败)
+        异常退出
+    遍历所有顶点
+    {   if (编号i的顶点入度为0)
         {
-            for (int j = 0 to 7)
+            记录编号i
+            源点至此点的最短路径中，上一个顶点的编号置为-1
+            i的最短路径置为0
+        }
+        else dist[i] <- 无穷
+    }
+    遍历入度为0的顶点
+    {
+        定义 u 为最后一个入度为0的点
+        for (Edge * i <- firstEdge[u]; i; i <- i->next)
+        {
+            int v <- i->v
+            if (dist[u] + i->val < dist[v])
             {
-                获取当前位的值temp
-                if (temp)
-                    cur指向当前结点的右孩子
-                else
-                    cur指向当前结点的左孩子
-                if (找到了叶节点)
-                {
-                    将解码出的字符写入到outputFile
-                    if (解码完了所有字符)
-                        break;
-                    cur恢复指向根结点
-                }
+                dist[v] <- dist[u] + i->val
+                par[v] <- u
             }
+            v的入度-1
+            if (v的入度不为0)
+                stac[++tot] <- v
         }
     }
+    释放stac数组的空间
+}
+
+// 释放有向无环图的空间
+void destroyGraph()
+{
+    释放有向无环图各条边的空间，以及firstEdge、ind、dist、par数组的空间
 }
 \end{lstlisting}
 
@@ -321,7 +333,7 @@ void decode(FILE * inputFile, FILE * outputFile)
 
 \begin{figure}[htbp]
 
-    % \centering\includegraphics[width=0.4\textwidth]{./Images/pic4_2_2.png}
+    \centering\includegraphics[width=0.4\textwidth]{./Images/pic5_2.png}
 
     \caption{函数调用关系图}
 
