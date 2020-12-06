@@ -4,7 +4,7 @@
 
 #ifndef LAB5_GRAPH_H
 #define LAB5_GRAPH_H
-
+#include <stdbool.h>
 #endif //LAB5_GRAPH_H
 
 typedef struct edge
@@ -16,12 +16,12 @@ typedef struct edge
 extern int n, m; // n为点数，m为边数
 extern int * ind; // 各个顶点的入度
 extern int * dist; // 源点至各个顶点的最短距离
-extern int * par; // 源点至此点的最短路径中，上一个顶点的编号
+extern int * start; // 距离这个点最远的点的编号
 extern Edge ** firstEdge;
 
 /*
  * 操作：初始化有向无环图
- * 后件：初始化firstEdge、ind、dist、par数组
+ * 后件：初始化firstEdge、ind、dist、start数组
  */
 void initGraph();
 
@@ -33,14 +33,14 @@ void initGraph();
 void addEdge(int u, int v, int val);
 
 /*
- * 操作：有向无环图的拓扑排序，求出dist和par数组的值
+ * 操作：有向无环图的拓扑排序，求出dist和start数组的值
  * 前件：firstEdge中存储有向无环图的信息
- * 后件：dist中存储源点至各个点的最短距离，par中记录最短路径
+ * 后件：如果有向无环图合法，则返回0，并且dist中存储源点至各个点的最短距离，start中记录最远的点的编号；否则函数返回1
  */
-void topologicalSort();
+bool topologicalSort();
 
 /*
  * 操作：释放有向无环图的空间
- * 后件：释放各条边的空间，以及firstEdge、ind、dist、par数组的空间
+ * 后件：释放各条边的空间，以及firstEdge、ind、dist、start数组的空间
  */
 void destroyGraph();

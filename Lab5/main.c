@@ -8,12 +8,7 @@
 int main()
 {
     scanf("%d%d", &n, &m);
-    if (n <= 1)
-    {
-        puts("There should be at least two points!");
-        return 0;
-    }
-    if (m <= 0)
+    if (m <= 0 || n <= 1)
     {
         puts("No solution.");
         return 0;
@@ -32,18 +27,20 @@ int main()
         v--;
         addEdge(u, v, val);
     }
-    topologicalSort();
+    if (topologicalSort())
+    {
+        puts("Invalid input.");
+        return 0;
+    }
     int ans1 = -1, ans2;
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) // 找到最长距离以及终点
         if (dist[i] > ans1)
         {
             ans1 = dist[i];
             ans2 = i;
         }
-    int u = ans2;
-    while (~par[u])u = par[u];
 //    printf("%d\n", ans1);
-    printf("%d %d %d\n", ans1, u + 1, ans2 + 1);
+    printf("%d %d %d\n", ans1, start[ans2] + 1, ans2 + 1);
     destroyGraph();
     return 0;
 }

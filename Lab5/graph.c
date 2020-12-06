@@ -2,13 +2,14 @@
 // Created by xqmmcqs on 2020/11/30.
 //
 
+#include <string.h>
 #include <stdlib.h>
 #include "graph.h"
 
 int n, m;
-int * ind, * dist, * par;
+int * ind, * dist, * start;
 Edge ** firstEdge;
-const int INF = 2147483647;
+const int INF = 0x7f7f7f7f;
 
 // 初始化有向无环图
 void initGraph()
@@ -19,7 +20,7 @@ void initGraph()
         exit(1);
     if (!(ind = (int *) calloc(n, sizeof(int))))
         exit(1);
-    if (!(par = (int *) calloc(n, sizeof(int))))
+    if (!(start = (int *) calloc(n, sizeof(int))))
         exit(1);
 }
 
@@ -36,39 +37,50 @@ void addEdge(int u, int v, int val)
     ++ind[v];
 }
 
-// 有向无环图的拓扑排序，求出dist和par数组的值
-void topologicalSort()
+// 有向无环图的拓扑排序，求出dist和startOfPoint数组的值
+bool topologicalSort()
 {
-    int * stac, tot = -1;
-    if (!(stac = (int *) calloc(n, sizeof(int *))))
+    int * tempdist, * order, head = 1, tail = 0; // tempdist用于临时存放每个源点到各个顶点的距离，order为拓扑序，head和tail是队列指针
+    if (!(tempdist = (int *) calloc(n + 1, sizeof(int))))
+        exit(1);
+    if (!(order = (int *) calloc(n + 1, sizeof(int))))
         exit(1);
     for (int i = 0; i < n; ++i)
-    {
         if (!ind[i])
-        {
-            stac[++tot] = i;
-            par[i] = -1;
-            dist[i] = 0;
-        }
-        else dist[i] = INF;
-    }
-    while (~tot)
+            order[++tail] = i;
+    while (head <= tail) // 拓扑排序
     {
-        int u = stac[tot--];
+        int u = order[head++];
         for (Edge * i = firstEdge[u]; i; i = i->next)
         {
-            int v = i->v;
-            if (dist[u] + i->val < dist[v])
-            {
-                dist[v] = dist[u] + i->val;
-                par[v] = u;
-            }
-            --ind[v];
-            if (!ind[v])
-                stac[++tot] = v;
+            --ind[i->v];
+            if (!ind[i->v])
+                order[++tail] = i->v;
         }
     }
-    free(stac);
+    for (int i = 0; i < n; ++i)
+        if (ind[i])
+            return 1;
+    for (int i = 1; i <= n; ++i)
+    {
+        memset(tempdist, INF, n * sizeof(int));
+        tempdist[order[i]] = 0; // order[i]为源点
+        for (int j = i; j <= n; ++j)
+        {
+            int u = order[j];
+            if (tempdist[u] != INF && tempdist[u] > dist[u]) // 从order[i]到u的距离比原先以u为终点的距离大
+            {
+                dist[u] = tempdist[u];
+                start[u] = order[i];
+            }
+            for (Edge * i = firstEdge[u]; i; i = i->next)
+                if (tempdist[u] + i->val < tempdist[i->v])
+                    tempdist[i->v] = tempdist[u] + i->val;
+        }
+    }
+    free(tempdist);
+    free(order);
+    return 0;
 }
 
 // 释放有向无环图的空间
@@ -79,5 +91,5 @@ void destroyGraph()
     free(firstEdge);
     free(dist);
     free(ind);
-    free(par);
+    free(start);
 }

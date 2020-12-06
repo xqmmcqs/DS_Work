@@ -68,7 +68,7 @@ language=c++,
 
             班级：2019211310 & 姓名：李臻   & 学号：2019211458 & 分工：测试\ 文档   \\
 
-            班级：2019211308 & 姓名：张梓靖 & 学号：2019211379 & 分工：可视化\ 文档 \\
+            班级：2019211308 & 姓名：张梓靖 & 学号：2019211379 & 分工：文档 \\
         \end{tabular}
     \end{table}
 }
@@ -88,19 +88,18 @@ language=c++,
 
 输入的第一行包含两个整数$n,m$，用空格分隔，分别表示有向无环图的点数和边数。
 
-接下来的$m$行，每行三个整数，用空格分隔，分别表示每个弧的弧尾、弧头和权值，顶点编号$x$的范围满足$1\leq x\leq n$，权值为正数。
+接下来的$m$行，每行三个整数，用空格分隔，分别表示每个弧的弧尾、弧头和权值，顶点编号$x$的范围满足$1\leq x\leq n$，权值为正整数。
 
 \subsection{输出描述}
 
 程序向标准输出中输出结果。
 
-输出分为以下五种情况：
+输出分为以下四种情况：
 
 \begin{enumerate}
-    \item 输入合法，程序正常运行结束，此时输出一行三个整数，用空格分隔，分别表示最长的距离和最长的两个顶点的编号。
-    \item 输入的有向无环图没有边，此时程序输出一个字符串“No solution.”表示无解。
-    \item 输入的有向无环图结点数不足2个，此时程序输出一个字符串“there should be at least two points!”。
-    \item 输入的弧头、弧尾或者权值信息范围有误，此时程序输出一个字符串“Invalid input.”。
+    \item 输入合法，程序正常运行结束，此时输出一行三个整数，用空格分隔，分别表示最长的距离和这两个顶点的编号。
+    \item 输入的有向无环图没有边或者结点数少于2，此时程序输出一个字符串“No solution.”表示无解。
+    \item 输入的弧头、弧尾或者权值信息范围有误，或者此图不是有向无环图，此时程序输出一个字符串“Invalid input.”。
     \item 程序发生运行时错误，比如内存分配失败等，此时程序没有输出。
 \end{enumerate}
 
@@ -112,13 +111,18 @@ language=c++,
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-aaababcd
+4 4
+3 4 34
+1 3 24
+2 4 56
+2 3 11
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+58 1 4
 \end{lstlisting}
 
 \subsubsection{样例输入输出2}
@@ -127,26 +131,105 @@ aaababcd
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+50 75
+15 18 10
+28 36 64
+29 45 22
+24 49 66
+3 35 48
+31 48 15
+14 29 20
+48 49 60
+40 42 80
+42 50 40
+2 23 10
+1 48 98
+21 28 86
+5 27 99
+21 26 30
+17 28 46
+24 50 34
+15 31 100
+13 37 47
+32 33 74
+25 34 12
+8 29 60
+20 37 93
+25 50 5
+26 31 18
+26 35 26
+34 45 92
+26 44 51
+10 20 70
+25 28 85
+26 46 58
+28 39 51
+23 35 66
+23 43 45
+35 43 76
+7 45 76
+33 41 58
+21 42 44
+36 37 86
+23 41 51
+44 50 37
+4 12 60
+26 30 29
+26 39 20
+6 30 15
+35 47 91
+32 34 32
+7 34 46
+17 25 14
+41 45 82
+25 27 92
+10 17 11
+20 48 7
+32 46 56
+8 49 31
+12 32 23
+42 48 87
+35 41 19
+35 49 6
+25 47 46
+38 42 60
+46 50 50
+2 41 96
+29 47 59
+9 20 1
+26 27 15
+2 25 93
+34 46 81
+40 45 31
+27 49 67
+39 50 53
+12 19 11
+43 48 15
+38 40 54
+45 49 26
 \end{lstlisting}
 
-【输出】(samples/sample2.out)
+【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+328 2 37
 \end{lstlisting}
 
 \subsubsection{样例输入输出3}
 
-【输入】(samples/sample3.in)
+【输入】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+5 0
 \end{lstlisting}
 
-【输出】(samples/sample3.out)
+【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+No solution.
 \end{lstlisting}
 
 \subsubsection{样例输入输出4}
@@ -155,26 +238,17 @@ aaababcd
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
+2 3
+8 2 12 
+1 2 3
+1 2 7
 \end{lstlisting}
 
 【输出】
 
 \begin{lstlisting}[
     basicstyle=\small\consolas]
-\end{lstlisting}
-
-\subsubsection{样例输入输出5}
-
-【输入】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
-\end{lstlisting}
-
-【输出】
-
-\begin{lstlisting}[
-    basicstyle=\small\consolas]
+Invalid input.
 \end{lstlisting}
 
 \subsection{程序功能}
@@ -185,9 +259,9 @@ aaababcd
 
 \subsection{问题解决的思路}
 
-程序建立采用邻接表存储的图，求出从源点（虚拟的）开始到每个顶点的距离及其路径，找到距离源点距离最大的点并且输出。
+程序建立采用邻接表存储的图，先求出拓扑序，再求出以每个点为源点到其余顶点的距离及其路径，记录所有情况中离源点的最大距离以及对应的源点。
 
-\subsection{有向无环图的设计}
+\subsection{图的设计}
 
 \begin{lstlisting}[language={C},
     numbers=left,
@@ -202,13 +276,13 @@ typedef struct edge
 
 extern int n, m; // n为点数，m为边数
 extern int * ind; // 各个顶点的入度
-extern int * dist; // 源点至各个顶点的最短距离
-extern int * par; // 源点至此点的最短路径中，上一个顶点的编号
+extern int * dist; // 以各个顶点为终点的的最长距离
+extern int * start; // 距离这个点最远的点的编号
 extern Edge ** firstEdge;
 
 /*
  * 操作：初始化有向无环图
- * 后件：初始化firstEdge、ind、dist、par数组
+ * 后件：初始化firstEdge、ind、dist、start数组
  */
 void initGraph();
 
@@ -220,26 +294,27 @@ void initGraph();
 void addEdge(int u, int v, int val);
 
 /*
- * 操作：有向无环图的拓扑排序，求出dist和par数组的值
+ * 操作：有向无环图的拓扑排序，求出dist和start数组的值
  * 前件：firstEdge中存储有向无环图的信息
- * 后件：dist中存储源点至各个点的最短距离，par中记录最短路径
+ * 后件：如果有向无环图合法，则返回0，并且dist中存储源点至各个点的最短距离，start中记录最远的点的编号；否则函数返回1
  */
-void topologicalSort();
+bool topologicalSort();
 
 /*
  * 操作：释放有向无环图的空间
- * 后件：释放各条边的空间，以及firstEdge、ind、dist、par数组的空间
+ * 后件：释放各条边的空间，以及firstEdge、ind、dist、start数组的空间
  */
 void destroyGraph();
+
 \end{lstlisting}
 
 \subsection{主程序的流程}
 
 \begin{enumerate}
-    \item 获取输入，判断是否构成图
-    \item 如果能构成图，则初始化图，后向图中加入弧
-    \item 将有向无环图拓扑排序，记录源点到各个顶点的最短距离和至该点的上一顶点的编号
-    \item 比较最短距离，找到图中的最长路径，并根据顶点编号输出路径
+    \item 输入，建图
+    \item 拓扑排序求以每个点为终点的最长距离
+    \item 比较最长距离，找到图中的最长路径
+    \item 输出
     \item 释放有向无环图的空间
 \end{enumerate}
 
@@ -259,7 +334,7 @@ void destroyGraph();
 
 \subsection{图的实现}
 
-有向无环图的设计中基本操作的伪代码算法如下：
+图的设计中基本操作的伪代码算法如下：
 
 \begin{lstlisting}[language={C},
     numbers=left,
@@ -268,7 +343,7 @@ void destroyGraph();
 // 初始化有向无环图
 void initGraph()
 {
-    初始化firstEdge、ind、dist、par数组并分配内存
+    初始化firstEdge、ind、dist、start数组并分配内存
     if (内存分配失败)
         异常退出
 }
@@ -276,7 +351,7 @@ void initGraph()
 // 向图中加入边
 void addEdge(int u, int v, int val)
 {
-    设置临时边temp存放待加入的边
+    初始化新的边元素temp
     if (内存分配失败)
         异常退出
     temp->val <- val
@@ -287,43 +362,47 @@ void addEdge(int u, int v, int val)
 }
 
 // 有向无环图的拓扑排序
-void topologicalSort()
+bool topologicalSort()
 {
-    定义 * stac, tot <- -1
-    if (stac内存分配失败)
+    定义临时数组tempdist用于临时存放每个源点到各个顶点的距离，order为拓扑序（同时是队列）
+    if (内存分配失败)
         异常退出
-    遍历所有顶点
-    {   if (编号i的顶点入度为0)
-        {
-            记录编号i
-            源点至此点的最短路径中，上一个顶点的编号置为-1
-            i的最短路径置为0
-        }
-        else dist[i] <- 无穷
-    }
-    遍历入度为0的顶点
+    遍历所有顶点，将入度为0的点入队
+    while (队列不为空)
     {
-        定义 u 为最后一个入度为0的点
-        for (Edge * i <- firstEdge[u]; i; i <- i->next)
+        u 为队首元素
+        遍历以u为弧尾的每一条弧
         {
-            int v <- i->v
-            if (dist[u] + i->val < dist[v])
-            {
-                dist[v] <- dist[u] + i->val
-                par[v] <- u
-            }
-            v的入度-1
-            if (v的入度不为0)
-                stac[++tot] <- v
+            弧头的入度-1
+            if (弧头的入度为0)
+                弧头入队
         }
     }
-    释放stac数组的空间
+    遍历每个顶点，通过检查入度判断这个图是不是有向无环图，不是则返回-1
+    for (i = 1 to n)
+    {
+        初始化tempdist数组为极大值
+        设置起点order[i]的tempdist为0
+        for (j = i to n)
+        {
+            u <- order[j]
+            if (tempdist[u]不为极大值 并且 tempdist[u] > dist[u])
+            {
+                dist[u] <- tempdist[u]
+                start[u] <- order[u]
+            }
+            遍历以u为弧尾的每一条弧
+                if (tempdist[u] + 边权 > tempdist[弧头])
+                    tempdist[弧头] = tempdist[u] + 边权
+        }
+    }
+    释放空间
 }
 
 // 释放有向无环图的空间
 void destroyGraph()
 {
-    释放有向无环图各条边的空间，以及firstEdge、ind、dist、par数组的空间
+    释放有向无环图各边元素的空间，以及firstEdge、ind、dist、start数组的空间
 }
 \end{lstlisting}
 
@@ -343,49 +422,39 @@ void destroyGraph()
 
 \subsection{调试过程中遇到的问题和思考}
 
-由于对二进制文件的输入、输出不熟悉，曾尝试使用printf和scanf函数进行输入输出，了解相关知识后改为调用fread和
-fwrite函数。
-
-在解码的过程中feof函数经常出现探测文件末尾不准确，故改为判断fread函数是否为0来结束循环。
-
-在构造哈夫曼树的过程中由于判断条件过于复杂，出现错误；改为了更简洁的判断条件。
-
-在写入到压缩文件之前，压缩码需要以'0'/'1'字符串的形式存储，否则调用各种字符串函数会出现错误。
-
-编码以8位压缩到一个字节当中，写入和读取的时候注意高低位的顺序。
+初步设计算法时从一个虚拟源点起求出到各个顶点的距离，在这其中找到最大值，但是不符合题意，之后改成了以每个点为起点分别求距离，再在这其中找最大值。
 
 \subsection{设计实现的回顾讨论}
 
-编码是每次从二进制文件中读入1024个字节，创建编码表并且压缩。
+通过一次处理出拓扑序，免去了之后求距离时每次再求一遍拓扑序，提高了效率。
 
-由于哈夫曼树结点数较少，所以存储下标时采用short类型，写入压缩文件时可以节省空间。
-
-对于没有出现过的字符显然不需要编码。调用库函数qsort对权值进行排序。
-
-哈夫曼树采取顺序存储结构，前$n$个结点为叶节点，之后$n-1$个结点为非叶节点，每次构造新的非叶节点时只需要比较
-叶节点中权值最小的两个结点和非叶节点中权值最小的两个结点，从中挑出权值最小的两个结点即可，使得查找结点的时间
-复杂度降低到$O(1)$
-
-压缩后的串为一个01串，将其每8位压缩到一个字节并写入压缩文件。
-
-对于只有一种字符的情况，由于无法建立哈夫曼树，所以压缩文件中只存储tot、该字符、原字符串的长度。编码和解码是均
-对这种情况特殊处理。
+本题中不采用深度优先遍历的方式求拓扑排序的原因，其一是编程复杂度较高，涉及传参等问题，其二是这种方法无法检测图的合法性。
 
 \subsection{算法复杂度分析}
 
-encode,decode函数的复杂度为$O(len)$，其中$len$为字符串长度。
+initgraph,addEdge函数的复杂度为$O(1)$。
 
-主函数的时间复杂度为$O(1)$，整体时间复杂度为$O(len)$。
+topologicalSort函数的复杂度为$O(n(n+m))$
+
+destroyGraph函数的复杂度为$O(e)$
+
+主函数的时间复杂度为$O(n+m)$，整体时间复杂度为$O(n(n+m))$。
+
+整体空间复杂度为$O(n+e)$
+
+可以发现当图较为稀疏时相比floyd算法，本算法的时间复杂度优势较大，但是当图十分稠密时，由于邻接表本身常数的限制，可能运行时间和floyd算法接近。
 
 \subsection{改进设想的经验和体会}
 
 \subsubsection{改进1}
 
-可以通过进一步压缩位（比如去掉一定为0的某些字节）来使得压缩率更高，但是编程复杂度会显著提高。
+在更新tempdist的过程中可以发现有些时候肯定产生不了更优的解，一部分情况可以跳过。
+
+比如，某些节点的tempdist[u]已经比dist[u]小，这个时候这个结点的部分后继的tempdist就可以跳过不需要再计算了，因为产生不了更长的距离。
 
 \subsubsection{改进2}
 
-可以判断如果压缩率大于1，则直接写入原文件。
+可以去除重边。应当有常数级别的优化。
 
 \section{用户使用说明}
 
@@ -393,7 +462,7 @@ encode,decode函数的复杂度为$O(len)$，其中$len$为字符串长度。
 
 \begin{lstlisting}[language={bash},
     basicstyle=\small\consolas]
-gcc -o main -std=c11 main.c huffman.c
+gcc -o main -std=c11 main.c graph.c
 \end{lstlisting}
 
 执行可执行文件：
@@ -410,19 +479,7 @@ gcc -o main -std=c11 main.c huffman.c
 main
 \end{lstlisting}
 
-之后将数据写入到指定文件中，可以通过标准输入选择选项，也可以通过执行可执行文件时传递参数来选择选项：
-
-\begin{enumerate}
-    \item 如果执行可执行文件时没有传递参数，则可以根据标准输入的提示选择压缩/解压功能，以及指定输入和输出文件的位置
-    \item 执行可执行文件时传递的参数：第一个参数为1或2，表示选择压缩/解压，之后两个参数分别为输入文件的路径和输出文件的路径，例如，执行
-\begin{lstlisting}[language={bash},
-    basicstyle=\small\consolas]
-./main 1 ./input.in ./output.out
-\end{lstlisting}
-    表示执行压缩功能，输入文件为本目录下的input.in，输出文件为本目录下的output.out
-\end{enumerate}
-
-通过标准输出打印提示信息。如果输入合法并且程序正常运行结束，主函数返回值为0。
+之后通过标准输入输入数据，格式参考1.2节，程序通过标准输出输出结果。如果输入合法并且程序正常运行结束，主函数返回值为0。
 
 \section{测试结果}
 
@@ -436,37 +493,56 @@ main
 
 测试边界条件。
 
-【输入】(samples/sample4.in)
+【输入】
 
-（空文件）
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+2 2
+1 2 3
+2 1 2
+\end{lstlisting}
 
-【输出】(samples/sample4.out)
+【输出】
 
-（空文件）
-
-【输入】(samples/sample5.in)
-
-文件内容为1000000个字符a
-
-【输出】(samples/sample5.out)
-
-压缩结果为一个8873字节的二进制文件。
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+Invalid input.
+\end{lstlisting}
 
 【输入】
 
-上一个例子的输出。
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+3 2
+1 2 3
+2 3 -1
+\end{lstlisting}
 
-【输出】(samples/sample6.out)
+【输出】
 
-解压与sample5.in相同。
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+Invalid input.
+\end{lstlisting}
+
+【输入】(samples/sample7.in)
+
+（一个规模较大的样例，略）
+
+【输出】
+
+\begin{lstlisting}[
+    basicstyle=\small\consolas]
+767 2 974
+\end{lstlisting}
 
 \subsection{测试第三部分}
 
 测试在macOS\ Big\ Sur\ 11.0.1下进行。
 
-在$len<=10$，$len<=100$，$n<=1000000$的范围下分别随机生成1000组测试数据，进行压缩和解压操作，并且比对解压结果和原始输入是否相同。
+在$n,m<=10$，$n,m<=100$，$n<=1000,m<=1500$的范围下分别随机生成1000组测试数据，分别输入到本算法和另外实现的floyd算法(testing/floyd.cpp)中计算，比较其输出。
 
-3000组数据中没有出现错误。
+3000组数据中输出均相同。
 
 数据生成程序(testing/data.cpp)如下：
 
@@ -480,16 +556,18 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     srand(time(0));
-    FILE *file = fopen("./raw.in", "wb");
     int n = atoi(argv[1]), m = atoi(argv[2]);
-    for (int i = 1; i <= n; ++i)
-        fprintf(file, "%c", rand() % m + 32);
-    fclose(file);
+    printf("%d %d\n", n, m);
+    for (int i = 1; i <= m; ++i)
+    {
+        int x = rand() % (n - 1) + 1;
+        printf("%d %d %d\n", x, rand() % (n - x) + x + 1, rand() % 100 + 1);
+    }
     return 0;
 }
 \end{lstlisting}
 
-传入两个参数，第一个参数是字符串的长度，第二个参数是字符集的大小。
+传入两个参数，分别是$n,m$的大小。
 
 比对脚本(testing/chk.sh)如下：
 
@@ -500,69 +578,15 @@ int main(int argc, char *argv[])
 for i in {1..100}
 do
     sleep 1
-    ./data 100000 5
-    ./main 1 raw.in encode.out
-    ./main 2 encode.out decode.out
-    if ! diff raw.in decode.out
+    ./data 1000 1500 >in.in
+    ./main <in.in >out.out
+    ./floyd <in.in >outt.out
+    if ! diff out.out outt.out
     then
         break
     fi
     echo "Correct"
 done
 \end{lstlisting}
-
-\section{可视化}
-
-随机生成若干组数据，使用该程序进行压缩，记录不同数据规模下的平均压缩率，并且使用JavaScript将结果可视化。
-
-比对脚本(testing/test.py)如下：
-
-\begin{lstlisting}[language={python},
-    numbers=left,
-    numberstyle=\tiny\consolas,
-    basicstyle=\small\consolas]
-import os
-import time
-
-with open("./result.txt", "w") as file:
-    for i in (10, 30, 50, 100, 500, 1000, 10000, 1000000):
-        for j in (3, 6, 10, 20, 30, 50, 95):
-            tot = 0
-            for k in range(100):
-                time.sleep(1)
-                os.system("./data {0} {1}".format(i, j))
-                os.system("./main 1 raw.in out.out")
-                tot += os.path.getsize("./out.out") / \
-                    os.path.getsize("./raw.in")
-            file.write("[{0}, {1}, {2}],\n".format(i, j, str(tot / 10)[:9]))
-\end{lstlisting}
-
-数据规模如下：
-
-$len=10,30,50,100,500,1000,10000,1000000$，字符集大小$=3,6,10,20,30,60,95$的数据各100组，共5600组数据。
-
-\subsubsection{实现细节}
-
-利用已有的压缩率数据，使用Highcharts库绘制散点图。
-
-\subsubsection{用户使用说明}
-
-使用现代浏览器打开Scatter/index.html，即可看到散点图，将鼠标指针放到某个点上可以看到对应的数据值，拖动图表可以从不同角度观察数据分布。
-
-\subsubsection{示例}
-
-见图3。
-
-\begin{figure}[htbp]
-    
-    % \centering\includegraphics[width=0.9\textwidth]{./Images/pic4_2_3.png}
-    
-    \caption{可视化示例}
-    
-\end{figure}
-
-\subsubsection{结论}
-
-可以观察到在字符串长度较小的时候和字符集大小较大的时候压缩率有明显上升，理想情况下在字符集大小在20以内，字符串大小在100以上会有比较好的压缩效果。
 
 \end{document}
