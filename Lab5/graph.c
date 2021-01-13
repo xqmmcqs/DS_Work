@@ -58,14 +58,14 @@ bool topologicalSort()
                 order[++tail] = i->v;
         }
     }
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i) // 不是有向无环图
         if (ind[i])
             return 1;
     for (int i = 1; i <= n; ++i)
     {
         memset(tempdist, INF, n * sizeof(int));
         tempdist[order[i]] = 0; // order[i]为源点
-        for (int j = i; j <= n; ++j)
+        for (int j = i; j <= n; ++j) // 依照拓扑序遍历剩余的点
         {
             int u = order[j];
             if (tempdist[u] != INF && tempdist[u] > dist[u]) // 从order[i]到u的距离比原先以u为终点的距离大
